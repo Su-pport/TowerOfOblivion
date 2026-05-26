@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class test : MonoBehaviour
 {
-    // 태현하이
+    // 태현하이 하이안해
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
