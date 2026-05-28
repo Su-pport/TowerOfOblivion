@@ -45,10 +45,14 @@ public class PlayerController : MonoBehaviour
     {
         myrigid.MovePosition(targetPosition);
     }
-    //start, in, end로 나눠서 작성
+    //start, in, end로 나눠서 작성, state는 start에서 변경
+
+
+    // 이동 시작, 이동 중, 이동 종료 메서드
     private void StartMove(Vector2 moveInput)
     {
-        if (state != PlayerState.Attack) {
+        if (state != PlayerState.Attack) // 공격 중이 아닐 때만 이동 시작
+        { 
             state = PlayerState.Move;
             InMove(moveInput);
         }
@@ -74,6 +78,7 @@ public class PlayerController : MonoBehaviour
         targetPosition = myrigid.position;
     }
 
+    // 공격 시작, 공격 중, 공격 종료 메서드
     private void StartAttack()
     {
         state = PlayerState.Attack;
