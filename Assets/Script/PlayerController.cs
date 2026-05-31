@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public InputManager input;
     private Animator animator;
     private PlayerState state;
+    [SerializeField] private HitEffect hitEffect;
 
     // 이동 관련 변수
     [SerializeField] private float moveSpeed = 5f;
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
         // 컴포넌트 초기화
         myrigid = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        
 
         // 이벤트 구독
         input.OnMove += StartMove;
@@ -89,6 +91,7 @@ public class PlayerController : MonoBehaviour
     {
         // 공격 애니메이션 재생
         animator.SetTrigger("Attack");
+        hitEffect.anim.SetTrigger("Attack");
         // 애니메이션이 끝날 때까지 대기
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
         EndAttack();
