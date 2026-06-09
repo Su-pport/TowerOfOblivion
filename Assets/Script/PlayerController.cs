@@ -17,12 +17,15 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private PlayerState state;
     [SerializeField] private HitEffect hitEffect;
+    private Stat stat;
 
     // 이동 관련 변수
     [SerializeField] private float moveSpeed = 5f;
     private Vector2 targetPosition;
 
+    // 구르기
     [SerializeField] private float rollSpeed = 2f;
+    [SerializeField] private float rollStaminaCost = 5;
     private Vector2 rollDirection;
     private Vector3 rollTarget;
 
@@ -33,6 +36,7 @@ public class PlayerController : MonoBehaviour
         // 컴포넌트 초기화
         myRigid = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        stat = GetComponent<Stat>();
         
 
         // 이벤트 구독
@@ -50,6 +54,7 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    // 이동 함수
     private void FixedUpdate()
     {
         if(state == PlayerState.Move)
@@ -59,8 +64,8 @@ public class PlayerController : MonoBehaviour
             myRigid.MovePosition(myRigid.position + rollDirection * rollSpeed * Time.fixedDeltaTime);
         }
     }
-    //start, in, end로 나눠서 작성, state는 start에서 변경
 
+    //start, in, end로 나눠서 작성, state는 start에서 변경
 
     // 이동 시작, 이동 중, 이동 종료 메서드
     private void StartMove(Vector2 moveInput)
@@ -117,10 +122,12 @@ public class PlayerController : MonoBehaviour
     // 구르기 시작, 구르기 중, 구르기 종료 메서드
     private void StartRoll()
     {
-        if (state == PlayerState.Move)
+        if (state == PlayerState.Move) // 움직이고 있을 때만 구르기 가능
         {
-            StartCoroutine(RollCoroutine());
-            state = PlayerState.Roll;
+            if (stat.UseStamina(rollStaminaCost)) { // 스테미너를 사용, 가능하면 true, 모자르면 false
+                StartCoroutine(RollCoroutine());
+                state = PlayerState.Roll;
+            }
         }
     }
 
@@ -131,8 +138,6 @@ public class PlayerController : MonoBehaviour
 
         // 구르기 방향 설정
         rollDirection = (targetPosition - myRigid.position).normalized;
-
-
 
 
         // 애니메이션이 끝날 때까지 대기
