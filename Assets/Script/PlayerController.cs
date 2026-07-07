@@ -24,8 +24,9 @@ public class PlayerController : MonoBehaviour
     private Vector2 targetPosition;
 
     // 구르기
-    [SerializeField] private float rollSpeed = 2f;
-    [SerializeField] private float rollStaminaCost = 5;
+    private float rollSpeed;
+    [SerializeField] private float rollSpeedRate = 1f;
+    [SerializeField] private float rollStaminaCost = 5f;
     private Vector2 rollDirection;
     private Vector3 rollTarget;
 
@@ -38,6 +39,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         stat = GetComponent<Stat>();
         
+        rollSpeed = moveSpeed * rollSpeedRate;
 
         // 이벤트 구독
         input.OnMove += StartMove;
@@ -88,7 +90,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.localScale = new Vector3(1, 1, 1);
         }
-        targetPosition = myRigid.position + (moveInput.normalized * moveSpeed) * Time.fixedDeltaTime;
+        targetPosition = myRigid.position + (moveInput.normalized * moveSpeed * stat._moveSpeedRate) * Time.fixedDeltaTime;
     }
 
     private void EndMove()
