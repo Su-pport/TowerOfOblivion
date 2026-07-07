@@ -156,7 +156,8 @@ MonoBehaviour:
   input: {fileID: 75853265}
   hitEffect: {fileID: 668377505}
   moveSpeed: 5
-  rollSpeed: 7
+  rollSpeedRate: 1
+  rollStaminaCost: 5
 --- !u!50 &75853267
 Rigidbody2D:
   serializedVersion: 5
@@ -221,6 +222,27 @@ CapsuleCollider2D:
   m_Offset: {x: 0.002494365, y: 0.120853305}
   m_Size: {x: 0.2662084, y: 0.2662084}
   m_Direction: 0
+--- !u!114 &75853271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75853261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d875b72fbb8d99408cd5e268fbd3738, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Stat
+  statAttackPower: 5
+  statMagicPower: 5
+  statAgility: 5
+  statHealth: 5
+  statWillPower: 5
+  statStamina: 5
+  maxSTRate: 10
+  stRecoveryAmountRate: 2
+  checkInterval: 1.5
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,6 +388,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1851985856437256121, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
+      propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 2585291683982116248, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -456,7 +482,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2750312420938659318, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
       propertyPath: m_Name
-      value: Unit0
+      value: PlayerRoot
       objectReference: {fileID: 0}
     - target: {fileID: 5933570496284006358, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
       propertyPath: m_LocalPosition.y
@@ -495,6 +521,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1851985856437256121, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 75853266}
+    - targetCorrespondingSourceObject: {fileID: 1851985856437256121, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 75853271}
     - targetCorrespondingSourceObject: {fileID: 1851985856437256121, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 75853265}
