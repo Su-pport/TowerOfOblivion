@@ -7,30 +7,45 @@ public class PlayerController : MonoBehaviour
     {
         Idle,
         Move,
-        Attack
+        Attack,
+        Roll
     }
 
     // 필요한 컴포넌트
-    private Rigidbody2D myrigid;
-    public InputManager input;
+    private Rigidbody2D myRigid;
+    public InputManager input; 
     private Animator animator;
     private PlayerState state;
+    [SerializeField] private HitEffect hitEffect;
+    private Stat stat;
 
     // 이동 관련 변수
     [SerializeField] private float moveSpeed = 5f;
     private Vector2 targetPosition;
 
+    // 구르기
+    private float rollSpeed;
+    [SerializeField] private float rollSpeedRate = 1f;
+    [SerializeField] private float rollStaminaCost = 5f;
+    private Vector2 rollDirection;
+    private Vector3 rollTarget;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         // 컴포넌트 초기화
-        myrigid = GetComponent<Rigidbody2D>();
+        myRigid = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        stat = GetComponent<Stat>();
+        
+        rollSpeed = moveSpeed * rollSpeedRate;
 
         // 이벤트 구독
         input.OnMove += StartMove;
         input.OnMoveEnd += EndMove;
         input.OnAttack += StartAttack;
+        input.OnRoll += StartRoll;
 
         state = PlayerState.Idle;
     }
@@ -41,17 +56,23 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    // 이동 함수
     private void FixedUpdate()
     {
-        myrigid.MovePosition(targetPosition);
+        if(state == PlayerState.Move)
+            myRigid.MovePosition(targetPosition);
+        if (state == PlayerState.Roll)
+        {
+            myRigid.MovePosition(myRigid.position + rollDirection * rollSpeed * Time.fixedDeltaTime);
+        }
     }
-    //start, in, end로 나눠서 작성, state는 start에서 변경
 
+    //start, in, end로 나눠서 작성, state는 start에서 변경
 
     // 이동 시작, 이동 중, 이동 종료 메서드
     private void StartMove(Vector2 moveInput)
     {
-        if (state != PlayerState.Attack) // 공격 중이 아닐 때만 이동 시작
+        if (state == PlayerState.Idle || state == PlayerState.Move) // 가만히있거나, 움직일때 계속 움직이게
         { 
             state = PlayerState.Move;
             InMove(moveInput);
@@ -69,13 +90,13 @@ public class PlayerController : MonoBehaviour
         {
             transform.localScale = new Vector3(1, 1, 1);
         }
-        targetPosition = myrigid.position + (moveInput.normalized * moveSpeed) * Time.fixedDeltaTime;
+        targetPosition = myRigid.position + (moveInput.normalized * moveSpeed * stat._moveSpeedRate) * Time.fixedDeltaTime;
     }
 
     private void EndMove()
     {
         animator.SetFloat("RunState", 0f);
-        targetPosition = myrigid.position;
+        targetPosition = myRigid.position;
     }
 
     // 공격 시작, 공격 중, 공격 종료 메서드
@@ -89,6 +110,7 @@ public class PlayerController : MonoBehaviour
     {
         // 공격 애니메이션 재생
         animator.SetTrigger("Attack");
+        hitEffect.anim.SetTrigger("Attack");
         // 애니메이션이 끝날 때까지 대기
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
         EndAttack();
@@ -98,4 +120,35 @@ public class PlayerController : MonoBehaviour
     {
         state = PlayerState.Idle;
     }
-} 
+
+    // 구르기 시작, 구르기 중, 구르기 종료 메서드
+    private void StartRoll()
+    {
+        if (state == PlayerState.Move) // 움직이고 있을 때만 구르기 가능
+        {
+            if (stat.UseStamina(rollStaminaCost)) { // 스테미너를 사용, 가능하면 true, 모자르면 false
+                StartCoroutine(RollCoroutine());
+                state = PlayerState.Roll;
+            }
+        }
+    }
+
+    IEnumerator RollCoroutine()
+    {
+        // 구르기 애니메이션 재생
+        animator.SetTrigger("Roll");
+
+        // 구르기 방향 설정
+        rollDirection = (targetPosition - myRigid.position).normalized;
+
+
+        // 애니메이션이 끝날 때까지 대기
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+        EndRoll();
+    }
+
+    private void EndRoll()
+    {
+        state = PlayerState.Idle;
+    }
+}
