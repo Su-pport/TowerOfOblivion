@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Stat : MonoBehaviour
@@ -10,34 +11,74 @@ public class Stat : MonoBehaviour
     [SerializeField] public float statWillPower;   // 정신력
     [SerializeField] public float statStamina;     // 지구력
 
-    private float attackPower; // 물리 공격력
-    private float magicPower; // 마법 공격력
-    private float moveSpeedRate; // 이동속도 배율  
     private float shotSpeed; // 연사속도
-    private float maxHP; // HP 총량
-    private float currentHP; // 현재 HP
-    private float maxMP; // MP 총량
-    private float currentMP; // 현재 MP
-    private float maxST; // 스테미너 총량
-    private float currentST; // 현재 스테미너
+    
+    
+    
+
+    // 스텟 포인트
+    [SerializeField] private int LVupGetPoint = 4; // 레벨 업 시 얻는 스텟 포인트
+    [SerializeField] private int statPoint = 0; // 사용하지 않은 스텟 포인트
 
     //읽기 전용 변수
     public float _moveSpeedRate => moveSpeedRate;
 
     [Header("--각종 세부 변수--")]
+
+    [Header("공격력 관련")]
+    [Tooltip("물리 공격력 배율(스탯 * 이 변수)")]
+    [SerializeField] float attackPowerRate = 5;
+
+    private float attackPower; // 물리 공격력
+
+
+    [Header("마력 관련")]
+    [Tooltip("마법 공격력 배율(스탯 * 이 변수)")]
+    [SerializeField] float magicPowerRate = 5;
+
+    private float magicPower; // 마법 공격력
+
+
+    [Header("순발력 관련")]
+    private float moveSpeedRate; // 이동속도 배율
+                                 // 값 변경은 SetMoveSpeedRate() 참고
+
+
+    [Header("체력 관련")]
+    [Tooltip("체력 총량 배율(스탯 * 이 변수)")]
+    [SerializeField] float maxHPRate;
+
+    private float maxHP; // HP 총량
+    private float currentHP; // 현재 HP
+
+    
+
+    [Header("정신력 관련")]
+    [Tooltip("총량 배율(스탯 * 이 변수)")]
+    [SerializeField] float maxMPRate;
+
+    private float maxMP; // MP 총량
+    private float currentMP; // 현재 MP
+
+    
+
+
     [Header("스테미너 관련")]
-
     [Tooltip("스테미너 총량 배율(스탯 * 이 변수)")]
-    [SerializeField] float maxSTRate = 10f; // 
-
-    float stRecoveryAmount; // 초당 스테미너 회복량
+    [SerializeField] float maxSTRate = 10f; //
+    
     [Tooltip("초당 스테미너 회복량 배율(스탯 * 이 변수")]
     [SerializeField] float stRecoveryAmountRate = 2.0f; // 
 
     [Tooltip("이 시간동안 스테미너의 변동이 없으면 회복 시작")]
     [SerializeField] float checkInterval = 1.5f; // 
 
-    
+    private float maxST; // 스테미너 총량
+    private float currentST; // 현재 스테미너
+
+    float stRecoveryAmount; // 초당 스테미너 회복량
+
+
     float timer = 0f; // 스테미너 변동이 없었던 시간
     float lastValue; // 마지막으로 스테미너가 변동된 값
     bool initialized = false; // 초기화 여부 lastValue가 초기화되지 않았을 때 false, 초기화된 후 true
@@ -60,6 +101,16 @@ public class Stat : MonoBehaviour
         SetMoveSpeedRate(); // 지금은 항상 확인하지만 나중에 스탯을 올리는 함수를 짜면 올릴때만 적용하면 됨
         RegenerateStamina();
     }
+
+    public void LevelUp()
+    {
+        statPoint += LVupGetPoint;
+    }
+
+
+
+
+
 
     // 순발력
     private void SetMoveSpeedRate()

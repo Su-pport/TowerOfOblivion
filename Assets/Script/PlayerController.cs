@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour
         Idle,
         Move,
         Attack,
-        Roll
+        Roll,
+        Jump
     }
 
     // 필요한 컴포넌트
@@ -46,6 +47,7 @@ public class PlayerController : MonoBehaviour
         input.OnMoveEnd += EndMove;
         input.OnAttack += StartAttack;
         input.OnRoll += StartRoll;
+        input.OnJump += StartJump;
 
         state = PlayerState.Idle;
     }
@@ -150,5 +152,15 @@ public class PlayerController : MonoBehaviour
     private void EndRoll()
     {
         state = PlayerState.Idle;
+    }
+
+    // 점프 시작, 점프 중, 점프 종료 메서드
+    // 기획은 몬스터 없을 때만 점프 가능
+
+    private void StartJump()
+    {
+        // 몬스터가 없을 때 예외 처리 해야함
+
+
     }
 }
