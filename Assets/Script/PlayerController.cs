@@ -161,6 +161,13 @@ public class PlayerController : MonoBehaviour
     {
         // 몬스터가 없을 때 예외 처리 해야함
 
+        state = PlayerState.Jump;
+        StartCoroutine(JumpCoroutine());
 
+    }
+
+    IEnumerator JumpCoroutine()
+    {
+        yield return null;
     }
 }
