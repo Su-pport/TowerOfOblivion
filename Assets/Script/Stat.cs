@@ -18,8 +18,8 @@ public class Stat : MonoBehaviour
     private float currentHP; // 현재 HP
     private float maxMP; // MP 총량
     private float currentMP; // 현재 MP
-    private float maxST; // 스테미너 총량
-    private float currentST; // 현재 스테미너
+    public float maxST; // 스테미너 총량
+    public float currentST; // 현재 스테미너
 
     //읽기 전용 변수
     public float _moveSpeedRate => moveSpeedRate;
