@@ -14,18 +14,20 @@ public class Stat : MonoBehaviour
     private float magicPower; // 마법 공격력
     private float moveSpeedRate; // 이동속도 배율  
     private float shotSpeed; // 연사속도
-    private float maxHP; // HP 총량
-    private float currentHP; // 현재 HP
-    private float maxMP; // MP 총량
-    private float currentMP; // 현재 MP
-    public float maxST; // 스테미너 총량
-    public float currentST; // 현재 스테미너
+
+    [Header("HP, MP")]
+    public float maxHP; // HP 총량
+    public float currentHP; // 현재 HP
+    public float maxMP; // MP 총량
+    public float currentMP; // 현재 MP
 
     //읽기 전용 변수
     public float _moveSpeedRate => moveSpeedRate;
 
     [Header("--각종 세부 변수--")]
     [Header("스테미너 관련")]
+    public float maxST; // 스테미너 총량
+    public float currentST; // 현재 스테미너
 
     [Tooltip("스테미너 총량 배율(스탯 * 이 변수)")]
     [SerializeField] float maxSTRate = 10f; // 
@@ -46,6 +48,12 @@ public class Stat : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //HP, MP
+        maxHP = statHealth * 10f;
+        currentHP = maxHP;
+        maxMP = statWillPower * 10f;
+        currentMP = maxMP;
+
         // 스테미너
         maxST = statStamina * maxSTRate; // 스테미너 총량은 스테미너의 10배로 설정
         currentST = maxST; // 현재 스테미너는 총량으로 초기화
