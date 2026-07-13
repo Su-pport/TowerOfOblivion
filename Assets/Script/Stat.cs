@@ -64,8 +64,8 @@ public class Stat : MonoBehaviour
     [Tooltip("이 시간동안 스테미너의 변동이 없으면 회복 시작")]
     [SerializeField] float checkInterval = 1.5f; // 
 
-    private float maxST; // 스테미너 총량
-    private float currentST; // 현재 스테미너
+    public float maxST; // 스테미너 총량
+    public float currentST; // 현재 스테미너
 
     float stRecoveryAmount; // 초당 스테미너 회복량
 
@@ -84,6 +84,9 @@ public class Stat : MonoBehaviour
         maxHP = statHealth * maxHPRate;
         maxMP = statWillPower * maxMPRate;
         maxST = statStamina * maxSTRate;
+
+        currentHP = maxHP;
+        currentMP = maxMP;
 
         currentST = maxST; // 현재 스테미너는 총량으로 초기화
         stRecoveryAmount = statStamina * stRecoveryAmountRate; // 초당 스테미너 회복량 초기화
