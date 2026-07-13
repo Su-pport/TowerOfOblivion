@@ -168,6 +168,13 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator JumpCoroutine()
     {
-        yield return null;
+        animator.SetTrigger("Jump");
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+        EndJump();
+    }
+
+    private void EndJump()
+    {
+        state = PlayerState.Idle;
     }
 }
