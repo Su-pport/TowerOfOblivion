@@ -33,7 +33,7 @@ public class BrainUI : MonoBehaviour
             new Vector2(
                 hpFill.sizeDelta.x,
                 hpStartHeight * hpPercent); //hp가 변할 때 HP_Fill y의 값을 계속 변동
-        
+
         mpFill.sizeDelta =
             new Vector2(
                 mpFill.sizeDelta.x,
