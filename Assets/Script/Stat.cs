@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Stat : MonoBehaviour
@@ -9,6 +10,11 @@ public class Stat : MonoBehaviour
     [SerializeField] public float statHealth;      // 체력
     [SerializeField] public float statWillPower;   // 정신력
     [SerializeField] public float statStamina;     // 지구력
+
+    private int playerLevel = 1;
+    [SerializeField] private int LUupGetPoint = 4;
+    [HideInInspector] public int statPoint = 0;
+
 
     private float attackPower; // 물리 공격력
     private float magicPower; // 마법 공격력
