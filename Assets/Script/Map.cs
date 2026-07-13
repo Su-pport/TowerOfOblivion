@@ -4,6 +4,18 @@ using UnityEngine.Tilemaps;
 
 public class BSPTilemapGenerator : MonoBehaviour
 {
+    /// <summary>
+    /// 맵에 저장될 타일 종류
+    /// 나중에 시야(FOV) 계산에서 Tilemap을 직접 조회하지 않고
+    /// 이 데이터를 이용해 빠르게 벽/바닥을 판단한다.
+    /// </summary>
+    public enum TileType
+    {
+        Empty,
+        Floor,
+        Wall
+    }
+
     public GameObject monsterPrefab; // 몬스터 프리팹
     public int monsterCount = 5;
 
@@ -13,13 +25,23 @@ public class BSPTilemapGenerator : MonoBehaviour
     public int minRoomSize = 6;        // 최소 방 크기
     public int maxIterations = 5;      // BSP 분할 횟수, 방 갯수
 
+    // ===== 바닥과 벽을 서로 다른 Tilemap에 그리기 =====
     [Header("Tilemap Settings")]
-    public Tilemap tilemap;            // Tilemap 컴포넌트
-    public TileBase floorTile;         // 바닥 타일
-    public TileBase wallTile;          // 벽 타일
+    public Tilemap floorTilemap;   // 바닥 Tilemap
+    public Tilemap wallTilemap;    // 벽 Tilemap
+
+    public TileBase floorTile;     // 바닥 타일
+    public TileBase wallTile;      // 벽 타일
 
     private List<Node> nodes = new List<Node>();   // BSP 노드 리스트
     private List<RectInt> rooms = new List<RectInt>(); // 생성된 방 리스트
+
+    /// <summary>
+    /// 맵 데이터를 저장하는 배열
+    /// Tilemap 대신 이 배열을 이용해서
+    /// 벽인지 바닥인지 판단하게 된다.
+    /// </summary>
+    private TileType[,] mapData;
 
     void Start()
     {
@@ -28,6 +50,11 @@ public class BSPTilemapGenerator : MonoBehaviour
 
     void GenerateMap()
     {
+        floorTilemap.ClearAllTiles();
+        wallTilemap.ClearAllTiles();
+        // 맵 데이터 배열 생성
+        mapData = new TileType[mapWidth, mapHeight];
+
         Node root = new Node(new RectInt(0, 0, mapWidth, mapHeight));
         nodes.Add(root);
 
@@ -44,11 +71,9 @@ public class BSPTilemapGenerator : MonoBehaviour
         }
 
         ConnectRooms(root);
+        EnsureAllRoomsConnected(); // 추가 연결
         DrawMap();
         //AddBoundaryWalls();
-        ConnectRooms(root);
-        EnsureAllRoomsConnected(); // 추가 연결
-
         SpawnMonsters(); // 몹 스폰
 
     }
@@ -149,7 +174,16 @@ public class BSPTilemapGenerator : MonoBehaviour
         }
 
         foreach (var pos in corridorTiles)
-            tilemap.SetTile(pos, floorTile);
+        {
+            // 바닥 Tilemap에 복도 생성
+            floorTilemap.SetTile(pos, floorTile);
+
+            // 맵 데이터에도 바닥으로 저장
+            if (IsInsideMap(pos.x, pos.y))
+            {
+                mapData[pos.x, pos.y] = TileType.Floor;
+            }
+        }
 
         foreach (var pos in corridorTiles)
         {
@@ -158,8 +192,19 @@ public class BSPTilemapGenerator : MonoBehaviour
                 for (int dy = -1; dy <= 1; dy++)
                 {
                     Vector3Int wallPos = new Vector3Int(pos.x + dx, pos.y + dy, 0);
-                    if (tilemap.GetTile(wallPos) == null)
-                        tilemap.SetTile(wallPos, wallTile);
+
+                    // 바닥도 없고 벽도 없는 곳에만 벽 생성
+                    if (floorTilemap.GetTile(wallPos) == null &&
+                        wallTilemap.GetTile(wallPos) == null)
+                    {
+                        wallTilemap.SetTile(wallPos, wallTile);
+
+                        // 맵 데이터에도 벽으로 저장
+                        if (IsInsideMap(wallPos.x, wallPos.y))
+                        {
+                            mapData[wallPos.x, wallPos.y] = TileType.Wall;
+                        }
+                    }
                 }
             }
         }
@@ -173,7 +218,16 @@ public class BSPTilemapGenerator : MonoBehaviour
             {
                 for (int y = room.y; y < room.y + room.height; y++)
                 {
-                    tilemap.SetTile(new Vector3Int(x, y, 0), floorTile);
+                    Vector3Int pos = new Vector3Int(x, y, 0);
+
+                    // 바닥 Tilemap에 바닥 그리기
+                    floorTilemap.SetTile(pos, floorTile);
+
+                    // 맵 데이터에도 바닥으로 저장
+                    if (IsInsideMap(x, y))
+                    {
+                        mapData[x, y] = TileType.Floor;
+                    }
                 }
             }
         }
@@ -185,9 +239,16 @@ public class BSPTilemapGenerator : MonoBehaviour
                 for (int y = room.y - 1; y <= room.y + room.height; y++)
                 {
                     Vector3Int pos = new Vector3Int(x, y, 0);
-                    if (tilemap.GetTile(pos) == null)
+                    if (floorTilemap.GetTile(pos) == null)
                     {
-                        tilemap.SetTile(pos, wallTile);
+                        // 벽 Tilemap에 벽 그리기
+                        wallTilemap.SetTile(pos, wallTile);
+
+                        // 맵 데이터에도 벽으로 저장
+                        if (IsInsideMap(pos.x, pos.y))
+                        {
+                            mapData[pos.x, pos.y] = TileType.Wall;
+                        }
                     }
                 }
             }
@@ -237,14 +298,25 @@ public class BSPTilemapGenerator : MonoBehaviour
     {
         for (int x = -1; x <= mapWidth; x++)
         {
-            tilemap.SetTile(new Vector3Int(x, -1, 0), wallTile);
-            tilemap.SetTile(new Vector3Int(x, mapHeight, 0), wallTile);
+            wallTilemap.SetTile(new Vector3Int(x, -1, 0), wallTile);
+            wallTilemap.SetTile(new Vector3Int(x, mapHeight, 0), wallTile);
         }
         for (int y = -1; y <= mapHeight; y++)
         {
-            tilemap.SetTile(new Vector3Int(-1, y, 0), wallTile);
-            tilemap.SetTile(new Vector3Int(mapWidth, y, 0), wallTile);
+            wallTilemap.SetTile(new Vector3Int(-1, y, 0), wallTile);
+            wallTilemap.SetTile(new Vector3Int(mapWidth, y, 0), wallTile);
         }
+    }
+
+    /// <summary>
+    /// 좌표가 맵 내부인지 확인
+    /// </summary>
+    bool IsInsideMap(int x, int y)
+    {
+        return x >= 0 &&
+               x < mapWidth &&
+               y >= 0 &&
+               y < mapHeight;
     }
 
     /// <summary>
