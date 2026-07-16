@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private PlayerState state;
     [SerializeField] private HitEffect hitEffect;
-    private Stat stat;
+    private PlayerStatManager playerStatManager;
 
     // 이동 관련 변수
     [SerializeField] private float moveSpeed = 5f;
@@ -35,10 +35,11 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
         // 컴포넌트 초기화
         myRigid = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        stat = GetComponent<Stat>();
+        playerStatManager = GetComponent<PlayerStatManager>();
         
         rollSpeed = moveSpeed * rollSpeedRate;
 
@@ -52,7 +53,7 @@ public class PlayerController : MonoBehaviour
         state = PlayerState.Idle;
     }
 
-    // Update is calㅁled once per frame
+    // Update is called once per frame
     void Update()
     {
         
@@ -92,7 +93,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.localScale = new Vector3(1, 1, 1);
         }
-        targetPosition = myRigid.position + (moveInput.normalized * moveSpeed * stat._moveSpeedRate) * Time.fixedDeltaTime;
+        targetPosition = myRigid.position + (moveInput.normalized * moveSpeed * playerStatManager._moveSpeedRate) * Time.fixedDeltaTime;
     }
 
     private void EndMove()
@@ -128,7 +129,7 @@ public class PlayerController : MonoBehaviour
     {
         if (state == PlayerState.Move) // 움직이고 있을 때만 구르기 가능
         {
-            if (stat.UseStamina(rollStaminaCost)) { // 스테미너를 사용, 가능하면 true, 모자르면 false
+            if (playerStatManager.UseStamina(rollStaminaCost)) { // 스테미너를 사용, 가능하면 true, 모자르면 false
                 StartCoroutine(RollCoroutine());
                 state = PlayerState.Roll;
             }

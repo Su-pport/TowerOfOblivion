@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class StaminaBar : MonoBehaviour
 {
-    public Stat stat;
+    public PlayerStatManager stat;
     public Transform fill;
 
     private float startWidth;

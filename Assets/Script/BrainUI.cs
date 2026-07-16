@@ -3,7 +3,7 @@ using UnityEngine;
 public class BrainUI : MonoBehaviour
 {
     
-    public Stat stat; //stat의 변수(currentHP, maxHP, currentMP, maxMP)를 가져오기 위해 
+    public PlayerStatManager stat; //stat의 변수(currentHP, maxHP, currentMP, maxMP)를 가져오기 위해 
 
     public RectTransform hpFill; //HP_Fill 오브젝트
     public RectTransform mpFill; //MP_Fill 오브젝트

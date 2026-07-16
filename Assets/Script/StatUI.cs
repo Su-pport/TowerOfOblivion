@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StatUI : MonoBehaviour
 {
-    public Stat stat;
+    public PlayerStatManager stat;
 
     public TMP_Text pointText;
 
