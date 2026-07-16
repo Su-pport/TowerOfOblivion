@@ -6,27 +6,27 @@ public class StatUI : MonoBehaviour
 {
     public Stat stat;
 
-    public TMP_Text pointText;
+    public TMP_Text pointText; //남은 포인트 텍스트 오브젝트
 
-    public TMP_Text attackText;
-    public TMP_Text magicText;
-    public TMP_Text agilityText;
-    public TMP_Text healthText;
-    public TMP_Text willText;
-    public TMP_Text staminaText;
+    public TMP_Text attackText; //공격력 텍스트 오브젝트
+    public TMP_Text magicText; //마력 텍스트 오브젝트
+    public TMP_Text agilityText; //순발력 텍스트 오브젝트
+    public TMP_Text healthText; //체력 텍스트 오브젝트
+    public TMP_Text willText; //정신력 텍스트 오브젝트
+    public TMP_Text staminaText; //지구력 텍스트 오브젝트
 
-    int tempAttack;
-    int tempMagic;
-    int tempAgility;
-    int tempHealth;
-    int tempWill;
-    int tempStamina;
+    int tempAttack; //적용하기 전 찍은 공격력 포인트
+    int tempMagic; //적용하기 전 찍은 마력 포인트
+    int tempAgility; //적용하기 전 찍은 순발력 포인트
+    int tempHealth; //적용하기 전 찍은 체력 포인트
+    int tempWill; //적용하기 전 찍은 정신력 포인트
+    int tempStamina; //적용하기 전 찍은 지구력 포인트
 
-    int tempPoint;
+    int tempPoint; //적용하기 전 남은 포인트
 
     void Start()
     {
-        ResetTempStat();
+        ResetTempStat(); //적용하기 전 포인트 리셋
     }
     void Update()
     {
