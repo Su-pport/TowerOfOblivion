@@ -12,7 +12,7 @@ public class Stat : MonoBehaviour
     [SerializeField] public float statStamina;     // 지구력
 
     // 스텟 포인트
-    private int playerLevel = 1;
+    private int playerLevel = 0;
     [SerializeField] private int LVupGetPoint = 4; // 레벨 업 시 얻는 스텟 포인트
     [HideInInspector] public int statPoint = 0; // 사용하지 않은 스텟 포인트
 
@@ -119,6 +119,7 @@ public class Stat : MonoBehaviour
             }
         if (Input.GetKeyDown(KeyCode.Alpha5))
             {playerLevel += 1;
+            statPoint += LVupGetPoint;
             Debug.Log("레벨 1증가");
             }
             

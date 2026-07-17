@@ -30,7 +30,7 @@ public class StatUI : MonoBehaviour
     }
     void Update()
     {
-        pointText.text = $"남은 포인트 : {tempPoint}";
+        pointText.text = $"남은 포인트 : {stat.statPoint} (-{tempPoint})";
 
         attackText.text = $"{stat.statAttackPower} (+{tempAttack})";
         magicText.text = $"{stat.statMagicPower} (+{tempMagic})";
@@ -49,57 +49,57 @@ public class StatUI : MonoBehaviour
         tempWill = 0;
         tempStamina = 0;
 
-        tempPoint = stat.statPoint;
+        tempPoint = 0;
     }
 
     public void AddAttack()
     {
         
-        if (tempPoint <= 0) return;
+        if (stat.statPoint <= tempPoint) return;
 
         tempAttack++;
-        tempPoint--;
+        tempPoint++;
 
     }
 
     public void AddMagic()
     {
-        if (tempPoint <= 0) return;
+        if (stat.statPoint <= tempPoint) return;
 
         tempMagic++;
-        tempPoint--;
+        tempPoint++;
     }
 
     public void AddAgility()
     {
-        if (tempPoint <= 0) return;
+        if (stat.statPoint <= tempPoint) return;
 
         tempAgility++;
-        tempPoint--;
+        tempPoint++;
     }
 
     public void AddHealth()
     {
-        if (tempPoint <= 0) return;
+        if (stat.statPoint <= tempPoint) return;
 
         tempHealth++;
-        tempPoint--;
+        tempPoint++;
     }
 
     public void AddWill()
     {
-        if (tempPoint <= 0) return;
+        if (stat.statPoint <= tempPoint) return;
 
         tempWill++;
-        tempPoint--;
+        tempPoint++;
     }
 
     public void AddStamina()
     {
-        if (tempPoint <= 0) return;
+        if (stat.statPoint <= tempPoint) return;
 
         tempStamina++;
-        tempPoint--;
+        tempPoint++;
     }
 
     public void RemoveAttack()
@@ -107,7 +107,7 @@ public class StatUI : MonoBehaviour
         if (tempAttack <= 0) return;
 
         tempAttack--;
-        tempPoint++;
+        tempPoint--;
     }
 
         public void RemoveMagic()
@@ -115,7 +115,7 @@ public class StatUI : MonoBehaviour
         if (tempMagic <= 0) return;
 
         tempMagic--;
-        tempPoint++;
+        tempPoint--;
     }
 
         public void RemoveAgility()
@@ -123,7 +123,7 @@ public class StatUI : MonoBehaviour
         if (tempAgility <= 0) return;
 
         tempAgility--;
-        tempPoint++;
+        tempPoint--;
     }
 
         public void RemoveHealth()
@@ -131,7 +131,7 @@ public class StatUI : MonoBehaviour
         if (tempHealth <= 0) return;
 
         tempHealth--;
-        tempPoint++;
+        tempPoint--;
     }
 
         public void RemoveWill()
@@ -139,7 +139,7 @@ public class StatUI : MonoBehaviour
         if (tempWill <= 0) return;
 
         tempWill--;
-        tempPoint++;
+        tempPoint--;
     }
 
         public void RemoveStamina()
@@ -147,7 +147,7 @@ public class StatUI : MonoBehaviour
         if (tempStamina <= 0) return;
 
         tempStamina--;
-        tempPoint++;
+        tempPoint--;
     }
 
     public void ApplyStat()
@@ -159,7 +159,7 @@ public class StatUI : MonoBehaviour
         stat.statWillPower += tempWill;
         stat.statStamina += tempStamina;
 
-        stat.statPoint = tempPoint;
+        stat.statPoint -= tempPoint;
 
         ResetTempStat();
     }
