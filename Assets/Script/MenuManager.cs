@@ -7,8 +7,13 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject MainPanel; //메인 페널
     [SerializeField] private GameObject settingPanel; //세팅 페널
     [SerializeField] private SettingManager settingManager;
-    public UIHoverEffect uIHoverEffect; 
+    public UIHoverEffect uIHoverEffect;
 
+    private void Start()
+    {
+        MainPanel.SetActive(true);
+        settingPanel.SetActive(false);
+    }
     public void StartGame() //게임 실행
     {
         SceneManager.LoadScene("Making_UI");

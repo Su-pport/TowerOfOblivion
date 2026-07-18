@@ -1,4 +1,5 @@
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class SettingManager : MonoBehaviour
@@ -16,6 +17,14 @@ public class SettingManager : MonoBehaviour
     [SerializeField] private UIHoverEffect graphicsTab;
     [SerializeField] private UIHoverEffect controlsTab;
     [SerializeField] private UIHoverEffect convenienceTab;
+
+    private void Start()
+    {
+        DisableAllPanels();
+        ResetTabs();
+
+        ShowAudio();
+    }
 
     public void ShowAudio()
     {
