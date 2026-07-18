@@ -15,8 +15,16 @@ public class InputManager : MonoBehaviour
     [SerializeField] private GameObject statPanel;
     [SerializeField] private GameObject inventoryPanel;
     [SerializeField] private GameObject darkBackground;
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private GameObject settingPanel;
 
-    // Update is called once per frame
+    [HideInInspector] public bool isPause = false;
+
+    void Start()
+    {
+        CloseAllPanel();
+        pausePanel.SetActive(false);
+    } 
     void Update()
     {
         // 이동 입력 처리
@@ -46,7 +54,7 @@ public class InputManager : MonoBehaviour
             OnJump?.Invoke();
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab) && !isPause)
         {
             if (statPanel.activeSelf)
             {
@@ -58,7 +66,7 @@ public class InputManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && !isPause)
         {
             if (inventoryPanel.activeSelf)
             {
@@ -67,6 +75,22 @@ public class InputManager : MonoBehaviour
             else
             {
                 OpenInventory();
+            }            
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isPause == true)
+            {
+                pausePanel.SetActive(false);
+                settingPanel.SetActive(false);
+                darkBackground.SetActive(false);
+                isPause = false;
+                Time.timeScale = 1f; 
+            }
+            else
+            {
+                OpenPause();
             }            
         }
     }
@@ -87,6 +111,18 @@ public class InputManager : MonoBehaviour
 
         inventoryPanel.SetActive(true);
         darkBackground.SetActive(true);
+
+        Time.timeScale = 0f;
+    }
+
+    public void OpenPause()
+    {
+        CloseAllPanel();
+
+        pausePanel.SetActive(true);
+        darkBackground.SetActive (true);
+
+        isPause = true;
 
         Time.timeScale = 0f;
     }
