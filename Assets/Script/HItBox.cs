@@ -24,12 +24,12 @@ public class HitBox : MonoBehaviour
         {
             hurtbox = other.GetComponent<HurtBox>();
             if (hurtbox != null)
-                Onhit(hurtbox);
+                OnHit(hurtbox);
         }
         
     }
 
-    private void Onhit(HurtBox hurtBox)
+    private void OnHit(HurtBox hurtBox)
     {
         hurtBox.TakeDamage(stat.attackPower);
     }
