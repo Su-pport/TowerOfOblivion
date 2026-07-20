@@ -1,10 +1,20 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class BSPTilemapGenerator : MonoBehaviour
 {
-    public enum TileType { Empty, Floor, Wall }
+    public enum TileType
+    {
+        Empty,      // 아무 것도 없는 공간
+        Floor,      // 방/복도 바닥
+        Wall,       // 벽
+        Dark,       // 아직 보지 못한 암흑 상태
+        Visible,    // 현재 플레이어 시야에 들어온 타일
+        Explored    // 과거에 봤지만 지금은 시야 밖인 타일 (흐릿하게 표시)
+    }
+
 
     [Header("Prefabs")]
     public GameObject monsterPrefab;
@@ -26,13 +36,30 @@ public class BSPTilemapGenerator : MonoBehaviour
     private List<RectInt> rooms = new List<RectInt>();
     private TileType[,] mapData;
 
+    List<Vector3Int> corridorTiles = new List<Vector3Int>();    // 복도는 바닥만 찍고, 벽은 나중에 DrawWalls에서 처리
+
+    int visionRadius = 6; // 시야 반경
+
+    // Tilemap Renderer에 적용할 색상
+    Color darkColor = Color.black;              // 완전 암흑
+    Color visibleColor = Color.white;           // 밝게 표시
+    Color exploredColor = new Color(0.5f, 0.5f, 0.5f); // 흐릿한 회색
+
+
     void Start()
     {
-        GenerateMap();
+        int testSeed = 12345; // 🧩 테스트용 시드 값 (고정)
+        GenerateMap(testSeed); // 시드 기반 맵 생성
+        //CreateMapBorder(); // 맵 외벽 생성
+        
+        // RenderMap(); // 초기 렌더링
     }
 
-    void GenerateMap()
+    void GenerateMap(int seed)
     {
+        Random.InitState(seed); // 🎲 시드 초기화: 같은 시드면 항상 동일한 맵 생성
+
+        // 이후 모든 Random.Range 호출은 동일한 시퀀스를 따름
         floorTilemap.ClearAllTiles();
         wallTilemap.ClearAllTiles();
 
@@ -101,10 +128,23 @@ public class BSPTilemapGenerator : MonoBehaviour
 
     RectInt CreateRoom(RectInt rect)
     {
-        int roomWidth = Random.Range(minRoomSize, rect.width);
-        int roomHeight = Random.Range(minRoomSize, rect.height);
-        int roomX = rect.x + Random.Range(0, rect.width - roomWidth);
-        int roomY = rect.y + Random.Range(0, rect.height - roomHeight);
+        // 방 크기를 최소/최대 범위 내에서 안전하게 설정
+        int roomWidth = Random.Range(minRoomSize, Mathf.Max(minRoomSize, rect.width));
+        int roomHeight = Random.Range(minRoomSize, Mathf.Max(minRoomSize, rect.height));
+
+        // 방 크기가 rect보다 커지지 않도록 보정
+        roomWidth = Mathf.Min(roomWidth, rect.width);
+        roomHeight = Mathf.Min(roomHeight, rect.height);
+
+        // 방 위치를 rect 내부에서 안전하게 랜덤 배치
+        int roomX = rect.x + Random.Range(0, Mathf.Max(1, rect.width - roomWidth));
+        int roomY = rect.y + Random.Range(0, Mathf.Max(1, rect.height - roomHeight));
+
+        // 맵 경계 안쪽으로 보정
+        if (roomX + roomWidth > mapWidth)
+            roomX = mapWidth - roomWidth;
+        if (roomY + roomHeight > mapHeight)
+            roomY = mapHeight - roomHeight;
 
         return new RectInt(roomX, roomY, roomWidth, roomHeight);
     }
@@ -122,38 +162,111 @@ public class BSPTilemapGenerator : MonoBehaviour
             CreateCorridor(leftCenter, rightCenter);
         }
     }
+    void CreateMapBorder()
+    {
+        for (int x = 0; x < mapWidth; x++)
+        {
+            // 위쪽과 아래쪽 라인
+            mapData[x, 0] = TileType.Wall;
+            mapData[x, mapHeight - 1] = TileType.Wall;
+        }
 
-    // 복도는 바닥만 찍고, 벽은 나중에 DrawWalls에서 처리
-    List<Vector3Int> corridorTiles = new List<Vector3Int>();
+        for (int y = 0; y < mapHeight; y++)
+        {
+            // 왼쪽과 오른쪽 라인
+            mapData[0, y] = TileType.Wall;
+            mapData[mapWidth - 1, y] = TileType.Wall;
+        }
+    }
+
+
+
+    // MST 기반 연결 + 추가 연결 (성능 최적화)
+    void EnsureAllRoomsConnected()
+    {
+        var centers = rooms.Select(r => new Vector2Int(r.x + r.width / 2, r.y + r.height / 2)).ToList();
+
+        // 모든 간선 계산 (O(n²)) → 성능이 문제되면 근처 방만 후보로 제한 가능
+        var edges = new List<(int, int, float)>();
+        for (int i = 0; i < centers.Count; i++)
+        {
+            for (int j = i + 1; j < centers.Count; j++)
+            {
+                float dist = Vector2Int.Distance(centers[i], centers[j]);
+                edges.Add((i, j, dist));
+            }
+        }
+        edges.Sort((a, b) => a.Item3.CompareTo(b.Item3));
+
+        // Kruskal MST
+        int[] parent = Enumerable.Range(0, centers.Count).ToArray();
+        int Find(int x) => parent[x] == x ? x : (parent[x] = Find(parent[x]));
+        void Union(int a, int b) => parent[Find(a)] = Find(b);
+
+        foreach (var (a, b, _) in edges)
+            if (Find(a) != Find(b)) { Union(a, b); CreateCorridor(centers[a], centers[b]); }
+
+        // 🔥 추가 연결: 방 개수의 1/5만 연결, 최소 거리 조건 강화
+        for (int i = 0; i < centers.Count / 5; i++)
+        {
+            int a = Random.Range(0, centers.Count);
+            int b = Random.Range(0, centers.Count);
+
+            if (a != b && (centers[a] - centers[b]).sqrMagnitude > minRoomSize * minRoomSize)
+                CreateCorridor(centers[a], centers[b]);
+        }
+    }
+
+    // 복도 생성 (직선/L자/Z자 랜덤)
     void CreateCorridor(Vector2Int a, Vector2Int b)
     {
-        if (Random.value > 0.5f)
+        int style = Random.Range(0, 5); // 0=직선, 1~2=L자, 3~4=Z자
+
+        if (style == 0) // 직선
+            DrawLine(a, b, Random.value > 0.5f ? "x" : "y");
+
+        else if (style <= 2) // L자
         {
-            for (int x = Mathf.Min(a.x, b.x); x <= Mathf.Max(a.x, b.x); x++)
-            {
-                corridorTiles.Add(new Vector3Int(x, a.y, 0));
-                corridorTiles.Add(new Vector3Int(x, a.y + 1, 0));
-            }
-            for (int y = Mathf.Min(a.y, b.y); y <= Mathf.Max(a.y, b.y); y++)
-            {
-                corridorTiles.Add(new Vector3Int(b.x, y, 0));
-                corridorTiles.Add(new Vector3Int(b.x + 1, y, 0));
-            }
+            DrawLine(a, new Vector2Int(b.x, a.y), "x");
+            DrawLine(new Vector2Int(b.x, a.y), b, "y");
+        }
+        else // Z자
+        {
+            var mid = new Vector2Int(
+                Mathf.Clamp((a.x + b.x) / 2 + Random.Range(-3, 3), 0, mapWidth - 1),
+                Mathf.Clamp((a.y + b.y) / 2 + Random.Range(-3, 3), 0, mapHeight - 1)
+            );
+            DrawLine(a, mid, "x");
+            DrawLine(mid, b, "y");
+        }
+    }
+
+    // 공통 라인 그리기 (경계 검증 포함)
+    void DrawLine(Vector2Int start, Vector2Int end, string axis)
+    {
+        if (axis == "x")
+        {
+            for (int x = Mathf.Min(start.x, end.x); x <= Mathf.Max(start.x, end.x); x++)
+                if (IsInsideMap(x, start.y)) AddCorridorTile(x, start.y);
         }
         else
         {
-            for (int y = Mathf.Min(a.y, b.y); y <= Mathf.Max(a.y, b.y); y++)
-            {
-                corridorTiles.Add(new Vector3Int(a.x, y, 0));
-                corridorTiles.Add(new Vector3Int(a.x + 1, y, 0));
-            }
-            for (int x = Mathf.Min(a.x, b.x); x <= Mathf.Max(a.x, b.x); x++)
-            {
-                corridorTiles.Add(new Vector3Int(x, b.y, 0));
-                corridorTiles.Add(new Vector3Int(x, b.y + 1, 0));
-            }
+            for (int y = Mathf.Min(start.y, end.y); y <= Mathf.Max(start.y, end.y); y++)
+                if (IsInsideMap(start.x, y)) AddCorridorTile(start.x, y);
         }
     }
+
+
+
+
+    // 안전하게 corridorTiles에 추가하는 헬퍼 함수
+    void AddCorridorTile(int x, int y)
+{
+    if (IsInsideMap(x, y))
+    {
+        corridorTiles.Add(new Vector3Int(x, y, 0));
+    }
+}
 
     void DrawRooms()
     {
@@ -195,19 +308,8 @@ public class BSPTilemapGenerator : MonoBehaviour
         }
     }
 
-    void EnsureAllRoomsConnected()
-    {
-        List<Vector2Int> centers = new List<Vector2Int>();
-        foreach (RectInt room in rooms)
-        {
-            centers.Add(new Vector2Int(room.x + room.width / 2, room.y + room.height / 2));
-        }
+   
 
-        for (int i = 0; i < centers.Count - 1; i++)
-        {
-            CreateCorridor(centers[i], centers[i + 1]);
-        }
-    }
 
     void SpawnMonsters()
     {
@@ -232,6 +334,82 @@ public class BSPTilemapGenerator : MonoBehaviour
     bool IsInsideMap(int x, int y)
     {
         return x >= 0 && x < mapWidth && y >= 0 && y < mapHeight;
+    }
+
+    // 시야 업데이트
+    void UpdateVision(Vector2Int playerPos)
+    {
+        // 기존 Visible → Explored로 변경
+        for (int x = 0; x < mapWidth; x++)
+        {
+            for (int y = 0; y < mapHeight; y++)
+            {
+                if (mapData[x, y] == TileType.Visible)
+                    mapData[x, y] = TileType.Explored;
+            }
+        }
+
+        // 360도 방향으로 광선 쏘기
+        for (int angle = 0; angle < 360; angle++)
+        {
+            float rad = angle * Mathf.Deg2Rad;
+            float dx = Mathf.Cos(rad);
+            float dy = Mathf.Sin(rad);
+
+            float x = playerPos.x;
+            float y = playerPos.y;
+
+            for (int step = 0; step <= visionRadius; step++)
+            {
+                int ix = Mathf.RoundToInt(x);
+                int iy = Mathf.RoundToInt(y);
+
+                if (!IsInsideMap(ix, iy)) break;
+
+                // 현재 타일을 Visible로 표시
+                mapData[ix, iy] = TileType.Visible;
+
+                // 벽 만나면 그 뒤는 밝히지 않음
+                if (mapData[ix, iy] == TileType.Wall) break;
+
+                x += dx;
+                y += dy;
+            }
+        }
+    }
+    void RenderMap(Tilemap tilemap)
+    {
+        for (int x = 0; x < mapWidth; x++)
+        {
+            for (int y = 0; y < mapHeight; y++)
+            {
+                Vector3Int pos = new Vector3Int(x, y, 0);
+
+                switch (mapData[x, y])
+                {
+                    case TileType.Wall:
+                        tilemap.SetTile(pos, wallTile);
+                        tilemap.SetColor(pos, Color.gray); // 벽은 항상 보이게
+                        break;
+
+                    case TileType.Floor:
+                    case TileType.Visible:
+                        tilemap.SetTile(pos, floorTile);
+                        tilemap.SetColor(pos, visibleColor);
+                        break;
+
+                    case TileType.Explored:
+                        tilemap.SetTile(pos, floorTile);
+                        tilemap.SetColor(pos, exploredColor);
+                        break;
+
+                    case TileType.Dark:
+                        tilemap.SetTile(pos, floorTile);
+                        tilemap.SetColor(pos, darkColor);
+                        break;
+                }
+            }
+        }
     }
 
     public class Node
