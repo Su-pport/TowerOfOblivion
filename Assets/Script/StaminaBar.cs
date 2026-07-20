@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class StaminaBar : MonoBehaviour
 {
-    public Stat stat;
+    public PlayerStatManager playerStatManager;
     public Transform fill;
 
     private float startWidth;
@@ -17,8 +17,8 @@ public class StaminaBar : MonoBehaviour
     void Update()
     {
         float ratio =
-            stat.currentST /
-            stat.maxST;
+            playerStatManager.currentST /
+            playerStatManager.maxST;
 
         fill.localScale =
             new Vector3(

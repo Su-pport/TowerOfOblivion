@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StatUI : MonoBehaviour
 {
-    public Stat stat;
+    public PlayerStatManager playerStatManager;
 
     public TMP_Text pointText; //남은 포인트 텍스트 오브젝트
 
@@ -30,14 +30,14 @@ public class StatUI : MonoBehaviour
     }
     void Update()
     {
-        pointText.text = $"남은 포인트 : {stat.statPoint} (-{tempPoint})";
+        pointText.text = $"남은 포인트 : {playerStatManager.statPoint} (-{tempPoint})";
 
-        attackText.text = $"{stat.statAttackPower} (+{tempAttack})";
-        magicText.text = $"{stat.statMagicPower} (+{tempMagic})";
-        agilityText.text = $"{stat.statAgility} (+{tempAgility})";
-        healthText.text = $"{stat.statHealth} (+{tempHealth})";
-        willText.text = $"{stat.statWillPower} (+{tempWill})";
-        staminaText.text = $"{stat.statStamina} (+{tempStamina})";
+        attackText.text = $"{playerStatManager.statAttackPower} (+{tempAttack})";
+        magicText.text = $"{playerStatManager.statMagicPower} (+{tempMagic})";
+        agilityText.text = $"{playerStatManager.statAgility} (+{tempAgility})";
+        healthText.text = $"{playerStatManager.statHealth} (+{tempHealth})";
+        willText.text = $"{playerStatManager.statWillPower} (+{tempWill})";
+        staminaText.text = $"{playerStatManager.statStamina} (+{tempStamina})";
     }
 
     public void ResetTempStat()
@@ -55,7 +55,7 @@ public class StatUI : MonoBehaviour
     public void AddAttack()
     {
         
-        if (stat.statPoint <= tempPoint) return;
+        if (playerStatManager.statPoint <= tempPoint) return;
 
         tempAttack++;
         tempPoint++;
@@ -64,7 +64,7 @@ public class StatUI : MonoBehaviour
 
     public void AddMagic()
     {
-        if (stat.statPoint <= tempPoint) return;
+        if (playerStatManager.statPoint <= tempPoint) return;
 
         tempMagic++;
         tempPoint++;
@@ -72,7 +72,7 @@ public class StatUI : MonoBehaviour
 
     public void AddAgility()
     {
-        if (stat.statPoint <= tempPoint) return;
+        if (playerStatManager.statPoint <= tempPoint) return;
 
         tempAgility++;
         tempPoint++;
@@ -80,7 +80,7 @@ public class StatUI : MonoBehaviour
 
     public void AddHealth()
     {
-        if (stat.statPoint <= tempPoint) return;
+        if (playerStatManager.statPoint <= tempPoint) return;
 
         tempHealth++;
         tempPoint++;
@@ -88,7 +88,7 @@ public class StatUI : MonoBehaviour
 
     public void AddWill()
     {
-        if (stat.statPoint <= tempPoint) return;
+        if (playerStatManager.statPoint <= tempPoint) return;
 
         tempWill++;
         tempPoint++;
@@ -96,7 +96,7 @@ public class StatUI : MonoBehaviour
 
     public void AddStamina()
     {
-        if (stat.statPoint <= tempPoint) return;
+        if (playerStatManager.statPoint <= tempPoint) return;
 
         tempStamina++;
         tempPoint++;
@@ -152,14 +152,14 @@ public class StatUI : MonoBehaviour
 
     public void ApplyStat()
     {
-        stat.statAttackPower += tempAttack;
-        stat.statMagicPower += tempMagic;
-        stat.statAgility += tempAgility;
-        stat.statHealth += tempHealth;
-        stat.statWillPower += tempWill;
-        stat.statStamina += tempStamina;
+        playerStatManager.statAttackPower += tempAttack;
+        playerStatManager.statMagicPower += tempMagic;
+        playerStatManager.statAgility += tempAgility;
+        playerStatManager.statHealth += tempHealth;
+        playerStatManager.statWillPower += tempWill;
+        playerStatManager.statStamina += tempStamina;
 
-        stat.statPoint -= tempPoint;
+        playerStatManager.statPoint -= tempPoint;
 
         ResetTempStat();
     }

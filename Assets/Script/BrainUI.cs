@@ -3,7 +3,7 @@ using UnityEngine;
 public class BrainUI : MonoBehaviour
 {
     
-    public Stat stat; //stat의 변수(currentHP, maxHP, currentMP, maxMP)를 가져오기 위해 
+    public PlayerStatManager playerStatManager; //playerStatManager의 변수(currentHP, maxHP, currentMP, maxMP)를 가져오기 위해 
 
     public RectTransform hpFill; //HP_Fill 오브젝트
     public RectTransform mpFill; //MP_Fill 오브젝트
@@ -26,8 +26,8 @@ public class BrainUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float hpPercent = stat.currentHP / stat.maxHP;
-        float mpPercent = stat.currentMP / stat.maxMP;
+        float hpPercent = playerStatManager.currentHP / playerStatManager.maxHP;
+        float mpPercent = playerStatManager.currentMP / playerStatManager.maxMP;
 
         hpFill.sizeDelta =
             new Vector2(

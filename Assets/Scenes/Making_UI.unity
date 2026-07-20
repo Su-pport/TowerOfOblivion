@@ -1329,7 +1329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2e3537308351b74db01736db058d31f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BrainUI
-  stat: {fileID: 75853271}
+  playerStatManager: {fileID: 75853274}
   hpFill: {fileID: 947775375}
   mpFill: {fileID: 1442749163}
   hpPercent: 1
@@ -1528,7 +1528,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0.002494365, y: 0.120853305}
   m_Size: {x: 0.2662084, y: 0.2662084}
   m_Direction: 0
---- !u!114 &75853271
+--- !u!114 &75853274
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1537,20 +1537,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 75853261}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d875b72fbb8d99408cd5e268fbd3738, type: 3}
+  m_Script: {fileID: 11500000, guid: c707d852bd2c6d04aac73ced35097215, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Stat
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatManager
   statAttackPower: 1
   statMagicPower: 1
   statAgility: 1
   statHealth: 1
   statWillPower: 1
   statStamina: 1
-  LVupGetPoint: 4
-  statPoint: 0
-  plusminus: 10
   attackPowerRate: 5
+  attackPower: 0
   magicPowerRate: 5
+  magicPower: 0
   maxHPRate: 10
   maxHP: 0
   currentHP: 0
@@ -1562,6 +1561,9 @@ MonoBehaviour:
   checkInterval: 1.5
   maxST: 0
   currentST: 0
+  LVupGetPoint: 4
+  statPoint: 0
+  plusminus: 10
 --- !u!1 &91856704
 GameObject:
   m_ObjectHideFlags: 0
@@ -3560,7 +3562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe476f7bc14738459f3131d66b2755c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaminaBar
-  stat: {fileID: 75853271}
+  playerStatManager: {fileID: 75853274}
   fill: {fileID: 1612034628}
 --- !u!212 &358628314
 SpriteRenderer:
@@ -5222,7 +5224,7 @@ PrefabInstance:
       addedObject: {fileID: 75853266}
     - targetCorrespondingSourceObject: {fileID: 1851985856437256121, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 75853271}
+      addedObject: {fileID: 75853274}
     - targetCorrespondingSourceObject: {fileID: 1851985856437256121, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 75853265}
@@ -7302,7 +7304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 656a6d8b46039804492095d738c0b847, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatUI
-  stat: {fileID: 75853271}
+  playerStatManager: {fileID: 75853274}
   pointText: {fileID: 191888636}
   attackText: {fileID: 1700354945}
   magicText: {fileID: 1215710177}
