@@ -695,7 +695,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2e3537308351b74db01736db058d31f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BrainUI
-  stat: {fileID: 75853274}
+  playerStatManager: {fileID: 75853274}
   hpFill: {fileID: 947775375}
   mpFill: {fileID: 1442749163}
   hpPercent: 1
@@ -806,6 +806,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abceb5ba1a129c7468b3cbdbd04fe893, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputManager
+  statUI: {fileID: 0}
+  statPanel: {fileID: 0}
+  inventoryPanel: {fileID: 0}
+  darkBackground: {fileID: 0}
+  pausePanel: {fileID: 0}
+  settingPanel: {fileID: 0}
+  isPause: 0
 --- !u!114 &75853266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -906,7 +913,9 @@ MonoBehaviour:
   statWillPower: 5
   statStamina: 5
   attackPowerRate: 5
+  attackPower: 0
   magicPowerRate: 5
+  magicPower: 0
   maxHPRate: 10
   maxHP: 0
   currentHP: 0
@@ -2052,7 +2061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe476f7bc14738459f3131d66b2755c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaminaBar
-  stat: {fileID: 75853274}
+  playerStatManager: {fileID: 75853274}
   fill: {fileID: 1612034628}
 --- !u!212 &358628314
 SpriteRenderer:
@@ -3654,7 +3663,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 656a6d8b46039804492095d738c0b847, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatUI
-  stat: {fileID: 0}
+  playerStatManager: {fileID: 0}
   pointText: {fileID: 191888636}
   attackText: {fileID: 1700354945}
   magicText: {fileID: 1215710177}

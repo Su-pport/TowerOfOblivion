@@ -26,28 +26,41 @@ public class PlayerStatManager : Stat
         // 체력, 마나 변경 확인용 임시 함수
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            currentHP -= plusminus;
+            if(currentHP>0){
+                currentHP -= plusminus;
+                if(currentHP <0 )
+                    currentHP = 0;
+            }
             Debug.Log("체력" + plusminus + "감소");
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             currentHP += plusminus;
+            if(currentHP>maxHP)
+                currentHP = maxHP;  
             Debug.Log("체력" + plusminus + "증가");
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            currentMP -= plusminus;
+            if(currentMP>0){
+                currentMP -= plusminus;
+                if(currentHP <0 )
+                    currentHP = 0;
+            }
             Debug.Log("정신력" + plusminus + "감소");
         }
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             currentMP += plusminus;
+            if(currentMP>maxMP)
+                currentMP = maxMP;  
             Debug.Log("정신력" + plusminus + "증가");
 
         }
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             playerLevel += 1;
+            LevelUp();
             Debug.Log("레벨 1증가");
         }
     }
@@ -55,6 +68,7 @@ public class PlayerStatManager : Stat
     public void LevelUp()
     {
         statPoint += LVupGetPoint;
+        return ;
     }
 
     // 스테미너
