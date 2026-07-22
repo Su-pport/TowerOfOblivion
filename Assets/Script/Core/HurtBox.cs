@@ -19,6 +19,7 @@ public class HurtBox : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        Debug.Log(stat.gameObject.name+ " took " + damage + " damage.");
         stat.TakeDamage(damage);
     }
 }
