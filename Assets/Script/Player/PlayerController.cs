@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 rollDirection;
     private Vector3 rollTarget;
 
+    // 기본공격
+    private GameObject hitbox;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -40,8 +42,10 @@ public class PlayerController : MonoBehaviour
         myRigid = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         playerStatManager = GetComponent<PlayerStatManager>();
+        hitbox = GetComponentInChildren<HitBox>().gameObject;
         
         rollSpeed = moveSpeed * rollSpeedRate;
+        hitbox.SetActive(false);
 
         // 이벤트 구독
         input.OnMove += StartMove;
@@ -114,6 +118,7 @@ public class PlayerController : MonoBehaviour
         // 공격 애니메이션 재생
         animator.SetTrigger("Attack");
         hitEffect.anim.SetTrigger("Attack");
+        hitbox.SetActive(true);
         // 애니메이션이 끝날 때까지 대기
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
         EndAttack();
@@ -122,6 +127,7 @@ public class PlayerController : MonoBehaviour
     private void EndAttack()
     {
         state = PlayerState.Idle;
+        hitbox.SetActive(false);
     }
 
     // 구르기 시작, 구르기 중, 구르기 종료 메서드

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -9,10 +10,14 @@ public class Enemy : MonoBehaviour
 
     private Rigidbody2D rb;              // 물리 이동을 위한 Rigidbody2D
 
+    private EnemyStatManager enemyStatManager;
     void Start()
     {
         // Rigidbody2D 컴포넌트를 가져옴
         rb = GetComponent<Rigidbody2D>();
+
+        enemyStatManager= GetComponent<EnemyStatManager>();
+        enemyStatManager.OnDeath += StartDeath;
     }
 
     void Update()
@@ -52,5 +57,20 @@ public class Enemy : MonoBehaviour
             }
         }
         // 감지 범위 밖이면 대기 (추적하지 않음)
+    }
+
+    private void StartDeath()
+    {
+        // 몬스터 사망 처리
+        Debug.Log("Enemy has died.");
+        StartCoroutine(DeathCoroutine());
+    }
+
+    IEnumerator DeathCoroutine()
+    {
+
+        yield return null;
+        Destroy(gameObject); // 몬스터 오브젝트 제거
+
     }
 }

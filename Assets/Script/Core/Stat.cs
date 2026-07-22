@@ -67,6 +67,9 @@ public class Stat : MonoBehaviour
     protected bool initialized = false; // 초기화 여부 lastValue가 초기화되지 않았을 때 false, 초기화된 후 true
 
 
+    // 죽음 이벤트
+    public event Action OnDeath;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected void init()
     {
@@ -104,7 +107,12 @@ public class Stat : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHP -= damage;
-        if (currentHP < 0)
+        if (currentHP <= 0)
+        {
             currentHP = 0;
+            OnDeath.Invoke();
+        }
+
+        Debug.Log(this.gameObject.name + " took " + damage + " damage. / " + currentHP + " / " + maxHP);
     }
 }
