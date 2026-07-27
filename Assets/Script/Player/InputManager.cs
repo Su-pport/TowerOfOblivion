@@ -24,6 +24,7 @@ public class InputManager : MonoBehaviour
     {
         CloseAllPanel();
         pausePanel.SetActive(false);
+        settingPanel.SetActive(false);
     } 
     void Update()
     {
