@@ -112,6 +112,7 @@ public class Stat : MonoBehaviour
             currentHP = 0;
             OnDeath.Invoke();
         }
+        GetComponent<HitFlash>().Flash();
 
         Debug.Log(this.gameObject.name + " took " + damage + " damage. / " + currentHP + " / " + maxHP);
     }
