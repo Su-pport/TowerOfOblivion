@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerStatManager : Stat
 {
@@ -62,6 +63,10 @@ public class PlayerStatManager : Stat
             playerLevel += 1;
             LevelUp();
             Debug.Log("레벨 1증가");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            SceneManager.LoadScene("EnemyScene");
         }
     }
 

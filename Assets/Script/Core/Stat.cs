@@ -110,7 +110,7 @@ public class Stat : MonoBehaviour
         if (currentHP <= 0)
         {
             currentHP = 0;
-            OnDeath.Invoke();
+            OnDeath?.Invoke();
         }
         GetComponent<HitFlash>().Flash();
 
