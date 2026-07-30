@@ -109,8 +109,11 @@ public class PlayerController : MonoBehaviour
     // 공격 시작, 공격 중, 공격 종료 메서드
     private void StartAttack()
     {
-        state = PlayerState.Attack;
-        StartCoroutine(AttckCoroutine());
+        if (state == PlayerState.Idle || state == PlayerState.Move)
+        { // 가만히있거나, 움직일때 공격 가능
+            state = PlayerState.Attack;
+            StartCoroutine(AttckCoroutine());
+        }
     }
 
     IEnumerator AttckCoroutine()
@@ -136,8 +139,8 @@ public class PlayerController : MonoBehaviour
         if (state == PlayerState.Move) // 움직이고 있을 때만 구르기 가능
         {
             if (playerStatManager.UseStamina(rollStaminaCost)) { // 스테미너를 사용, 가능하면 true, 모자르면 false
-                StartCoroutine(RollCoroutine());
                 state = PlayerState.Roll;
+                StartCoroutine(RollCoroutine());
             }
         }
     }
