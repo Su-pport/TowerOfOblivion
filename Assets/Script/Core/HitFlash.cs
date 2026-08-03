@@ -23,9 +23,12 @@ public class HitFlash : MonoBehaviour
 
     void Awake()
     {
-        faceHairColor = faceHair.color;
-        rightEyeColor = rightEye.color;
-        leftEyeColor = leftEye.color;
+        if(faceHair != null)
+            faceHairColor = faceHair.color;
+        if(rightEye != null)
+            rightEyeColor = rightEye.color;
+        if(leftEye != null)
+            leftEyeColor = leftEye.color;
 
         renderers = root.GetComponentsInChildren<SpriteRenderer>(true);
 
@@ -35,7 +38,7 @@ public class HitFlash : MonoBehaviour
         }   
     }
 
-    public void Flash(float duration = 10f)
+    public void Flash(float duration = 0.1f)
     {
         StopAllCoroutines();
         StartCoroutine(FlashRoutine(duration));
@@ -43,9 +46,12 @@ public class HitFlash : MonoBehaviour
 
     private IEnumerator FlashRoutine(float duration)
     {
-        faceHair.color = Color.white;
-        rightEye.color = Color.white;
-        leftEye.color = Color.white;
+        if(faceHair != null)
+            faceHair.color = Color.white;
+        if(rightEye != null)
+            rightEye.color = Color.white;
+        if(leftEye != null)
+            leftEye.color = Color.white;
         foreach (var sr in renderers)
         {
             sr.material.SetFloat("_Flash", 1f);
@@ -53,9 +59,12 @@ public class HitFlash : MonoBehaviour
 
         yield return new WaitForSeconds(duration);
 
-        faceHair.color = faceHairColor;
-        rightEye.color = rightEyeColor;
-        leftEye.color = leftEyeColor;
+        if(faceHair != null)
+            faceHair.color = faceHairColor;
+        if(rightEye != null)
+            rightEye.color = rightEyeColor;
+        if(leftEye != null)
+            leftEye.color = leftEyeColor;
 
         foreach (var sr in renderers)
         {
