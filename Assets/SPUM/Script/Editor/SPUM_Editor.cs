@@ -20,7 +20,10 @@ public class SPUM_Editor : Editor
             DirectoryInfo dirInfo = new DirectoryInfo(SPB.unitPath);
             FileInfo[] fileInfo = dirInfo.GetFiles("*.prefab");
 
-            SPB._unitNumber.text = fileInfo.Length + " / 100";
+            if (SPB._unitNumber != null)
+            {
+                SPB._unitNumber.text = fileInfo.Length + " / 100";
+            }
             
         }
 
