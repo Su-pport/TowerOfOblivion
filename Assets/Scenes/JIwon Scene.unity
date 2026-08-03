@@ -1429,6 +1429,23 @@ MonoBehaviour:
   rightEye: {fileID: 596128881}
   leftEye: {fileID: 1884144176}
   hitMaterial: {fileID: 2100000, guid: acd11301be5fe254084f97dd309f758a, type: 2}
+--- !u!114 &75853279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75853261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5e5feace7a4bae41b14227881820506, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryManager
+  items: []
+  equippedWeapon: {fileID: 0}
+  equippedHelmet: {fileID: 0}
+  equippedArmor: {fileID: 0}
+  equippedAccessory: {fileID: 0}
 --- !u!1 &91349417
 GameObject:
   m_ObjectHideFlags: 0
@@ -5305,6 +5322,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1851985856437256121, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 75853265}
+    - targetCorrespondingSourceObject: {fileID: 1851985856437256121, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 75853279}
     - targetCorrespondingSourceObject: {fileID: 1851985856437256121, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 75853276}
@@ -26579,6 +26599,18 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1989354076864373503, guid: 3f769c66d4ce6b044b1a8b89b1e7a81e, type: 3}
+      propertyPath: dropMoneyMax
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989354076864373503, guid: 3f769c66d4ce6b044b1a8b89b1e7a81e, type: 3}
+      propertyPath: dropMoneyMin
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1989354076864373503, guid: 3f769c66d4ce6b044b1a8b89b1e7a81e, type: 3}
+      propertyPath: InventoryManager
+      value: 
+      objectReference: {fileID: 75853279}
+    - target: {fileID: 1989354076864373503, guid: 3f769c66d4ce6b044b1a8b89b1e7a81e, type: 3}
       propertyPath: playerStatManager
       value: 
       objectReference: {fileID: 75853274}
@@ -26655,10 +26687,10 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 619394802}
+  - {fileID: 1838996845}
   - {fileID: 8249977797408620225}
   - {fileID: 566552932}
   - {fileID: 959009073}
   - {fileID: 1432365065}
   - {fileID: 519420032}
   - {fileID: 713122973}
-  - {fileID: 1838996845}

@@ -13,7 +13,6 @@ public class HurtBox : MonoBehaviour
         else if (GetComponentInParent<EnemyStatManager>() != null)
             stat = GetComponentInParent<EnemyStatManager>();
 
-        Debug.Log(stat.gameObject.name);
     }
 
 
