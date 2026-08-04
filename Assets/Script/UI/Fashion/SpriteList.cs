@@ -10,8 +10,17 @@ public class SpriteList : MonoBehaviour
     public List<SpriteRenderer> pantList = new List<SpriteRenderer>();
     public List<SpriteRenderer> weaponList = new List<SpriteRenderer>();
 
-    public List<string> _hairListString = new List<string>();
-    public List<string> _clothListString = new List<string>();
-    public List<string> _pantListString = new List<string>();
-    public List<string> _weaponListString = new List<string>();
+    public void Reset(){
+        for(var i = 0; i <hairList.Count; i++)
+            if(hairList[i]!=null) hairList[i].sprite = null;
+
+        for(var i = 0; i <clothList.Count; i++)
+            if(clothList[i]!=null) clothList[i].sprite = null;
+
+        for(var i = 0; i <pantList.Count; i++)
+            if(pantList[i]!=null) pantList[i].sprite = null;
+
+        for(var i = 0; i <weaponList.Count; i++)
+            if(weaponList[i]!=null) weaponList[i].sprite = null; 
+    }
 }

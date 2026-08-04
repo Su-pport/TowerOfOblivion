@@ -231,11 +231,13 @@ MonoBehaviour:
   content: {fileID: 1219405664}
   itemPrefab: {fileID: 5399739953986329322, guid: bc851fba3ab12b54abdcc47bb3a4282c, type: 3}
   colorPicker: {fileID: 1550725820}
+  nowFashion: 0
+  fashionButton: []
   nowColorNum: 0
   colorButton:
   - {fileID: 1143491675}
   - {fileID: 1097645009}
-  basicColor: {r: 1, g: 1, b: 1, a: 1}
+  basicColor: {r: 1, g: 0, b: 0, a: 1}
   nowColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!4 &54926869
 Transform:
