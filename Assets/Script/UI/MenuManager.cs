@@ -14,9 +14,9 @@ public class MenuManager : MonoBehaviour
         MainPanel.SetActive(true);
         settingPanel.SetActive(false);
     }
-    public void StartGame() //게임 실행
+    public void StartGame(string sceneName) //게임 실행
     {
-        SceneManager.LoadScene("Making_UI");
+        SceneManager.LoadScene(sceneName);
     }
 
     public void OpenSettings() //SettingPanel 열기

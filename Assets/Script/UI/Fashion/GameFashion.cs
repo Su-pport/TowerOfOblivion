@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Unity.VisualScripting;
@@ -37,6 +38,11 @@ public class GameFashion : MonoBehaviour
     public Transform content;
     public GameObject itemPrefab;
     public GameObject colorPicker;
+
+    public void StartGame(string sceneName) //게임 실행
+    {
+        SceneManager.LoadScene(sceneName);
+    }
 
     void Start()
     {
