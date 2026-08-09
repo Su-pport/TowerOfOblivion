@@ -41,6 +41,16 @@ public class GameFashion : MonoBehaviour
 
     public void StartGame(string sceneName) //게임 실행
     {
+        //캐릭터 데이터 저장
+        CharacterDataManager.Instance.data.hairColor = spriteObject.hairList[0].color;
+        CharacterDataManager.Instance.data.eyeColor = spriteObject.eyeList[0].color;
+
+        CharacterDataManager.Instance.data.hairSprite = spriteObject.hairList[0].sprite;
+        CharacterDataManager.Instance.data.clothSprite = spriteObject.clothList.ConvertAll(r => r.sprite).ToArray();
+        CharacterDataManager.Instance.data.pantSprite = spriteObject.pantList.ConvertAll(r => r.sprite).ToArray();
+        CharacterDataManager.Instance.data.weaponSprite = spriteObject.weaponList[0].sprite;
+
+        //씬 전환
         SceneManager.LoadScene(sceneName);
     }
 
@@ -51,13 +61,7 @@ public class GameFashion : MonoBehaviour
 
     public void SetReset()
     {
-        foreach (Image button in colorButtonImage) 
-        {
-            if(button == colorButtonImage[2])
-                button.color = skinColors[0];
-            else
-                button.color = basicColor;}
-        SetColor(spriteObject.bodyList, skinColors[0]);
+        foreach (var button in colorButtonImage) button.color = basicColor;
         SetColor(spriteObject.eyeList, basicColor);
         SetColor(spriteObject.hairList, basicColor);
         spriteObject.Reset();
@@ -178,34 +182,8 @@ public class GameFashion : MonoBehaviour
 
     public void RemoveFashion()
     {
-        switch(nowFashion)
-        {
-            case FashionType.Hair:
-            ClearSprites(spriteObject.hairList);
-            break;
-
-            case FashionType.Cloth:
-            ClearSprites(spriteObject.clothList);
-            break;
-
-            case FashionType.Pant:
-            ClearSprites(spriteObject.pantList);
-            break;
-
-            case FashionType.Weapon:
-            ClearSprites(spriteObject.weaponList);
-            break;
-        }
-
+        SetReset();
         CloseSpritePanel();
-    }
-
-    private void ClearSprites(List<SpriteRenderer> renderers)
-    {
-        foreach (var renderer in renderers)
-        {
-            if (renderer != null) renderer.sprite = null;
-        }
     }
 
     public void ChangeFashion(Sprite[] sprites = null, Sprite sprite = null)
@@ -342,19 +320,6 @@ public class GameFashion : MonoBehaviour
         }
     }
 
-    private int currentSkinIndex = 0;
-    public void ChangeSkinColor()
-    {
-        currentSkinIndex++;
-
-        if(currentSkinIndex >= skinColors.Count) currentSkinIndex = 0;
-        
-        Color skinColor = skinColors[currentSkinIndex];
-        SetColor(spriteObject.bodyList, skinColor);
-
-        colorButtonImage[2].color = skinColor;
-    }
-
     public void CloseSpritePanel()
     {
         spritePanel.SetActive(false);
@@ -448,20 +413,8 @@ public class GameFashion : MonoBehaviour
         colorButtonImage[0].color = randomColor;
     }
 
-    public void RandomSkin()
-    {
-        int randomIndex = Random.Range(0, skinColors.Count);
-        currentSkinIndex = randomIndex;
-        Color skinColor = skinColors[randomIndex];
-
-        SetColor(spriteObject.bodyList, skinColor);
-
-        colorButtonImage[2].color = skinColor;
-    }
-
     public void AllRandom()
     {
-        RandomSkin();
         RandomEye();
         RandomHair();
         RandomCloth();
