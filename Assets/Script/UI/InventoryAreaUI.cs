@@ -3,14 +3,21 @@ using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 
 
 public class InventoryAreaUI : MonoBehaviour
 {
+    public InventoryManager inventoryManager;   // 인벤토리 매니저
+
     public GameObject buttonPrefab;   // 버튼 프리팹
     public Transform contentParent;   // Content 오브젝트
+
+    private List<GameObject> buttons = new List<GameObject>();
+
     [SerializeField] private int maxVisibleButtons = 42;
     public int currentButtonCount = 0;
+
 
     public void CreateButtons(int count)
     {
@@ -26,6 +33,7 @@ public class InventoryAreaUI : MonoBehaviour
         {
             GameObject newButton = Instantiate(buttonPrefab, contentParent);
             newButton.GetComponentInChildren<TextMeshProUGUI>().text = (i + 1).ToString();
+            buttons.Add(newButton);
         }
         ScrollLock();
     }
@@ -46,7 +54,6 @@ public class InventoryAreaUI : MonoBehaviour
     {
         if (currentButtonCount <= maxVisibleButtons)
         {
-            Debug.Log("*******************");
 
             // 스크롤 잠금 로직 구현
             var scrollRect = GetComponent<UnityEngine.UI.ScrollRect>();
@@ -64,6 +71,13 @@ public class InventoryAreaUI : MonoBehaviour
             {
                 scrollRect.enabled = true;
             }
+        }
+    }
+
+    public void ShowInventory()
+    {
+        for(int i = 0; i<inventoryManager.currentItemCount; i++) {
+            buttons[i].transform.Find("ItemIcon").GetComponent<Image>().sprite = inventoryManager.items[i].icon;
         }
     }
 }

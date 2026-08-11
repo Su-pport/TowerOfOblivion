@@ -17,7 +17,7 @@ public class InventoryManager : MonoBehaviour {
     public Item equippedAccessory;
 
     [SerializeField] private int maxInventorySize = 42;
-
+    public int currentItemCount = 0;
 
 
     private void Start()
@@ -27,20 +27,31 @@ public class InventoryManager : MonoBehaviour {
     }
 
     //임시코드
+    public Item sword1;
+
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+
+            AddItem(sword1);
+            Debug.Log(sword1.name + "추가");
+        }
         if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             AddMaxInventorySize(10);
-            Debug.Log("");
         }
+
     }
+
+    // 여 기 까 지 임 시 코 드
+
 
     private void InitInventory()
     {
         for ( int i = 0; i< maxInventorySize; i++)
         {
-            AddItem(null);
+            items.Add(null);
         }
     }
 
@@ -52,8 +63,15 @@ public class InventoryManager : MonoBehaviour {
 
 
     public void AddItem(Item item) {
-        if( items.Count < maxInventorySize)
-            items.Add(item);
+        if( currentItemCount < maxInventorySize) {
+            items[currentItemCount] = item;
+            currentItemCount++;
+
+            if(item!=null)
+                Debug.Log(item.name + " has been added to the inventory.");
+
+            inventoryAreaUI.ShowInventory();
+        }
     }
 
     public void AddGold(int amount)
