@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: New Weapon Item
   m_EditorClassIdentifier: Assembly-CSharp::WeaponItem
-  itemName: 
-  icon: {fileID: 0}
-  description: 
-  value: 0
-  attackPower: 0
+  itemCode: 0
+  itemName: Sword
+  icon: {fileID: 21300000, guid: a79cf432755d5b84ba2363ceb780b693, type: 3}
+  description: "\uD3C9\uBC94\uD55C \uCE7C"
+  sellValue: 50
+  attackPower: 5
+  magitPower: 0
   attackSpeed: 0
