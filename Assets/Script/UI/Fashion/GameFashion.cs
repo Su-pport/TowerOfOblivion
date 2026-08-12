@@ -23,6 +23,7 @@ public class GameFashion : MonoBehaviour
         Hair
     }
     
+    //지워야 할 것 같음
     private const string HairPath = "SPUM/SPUM_Sprites/Items/0_Hair";
     private const string ClothPath = "SPUM/SPUM_Sprites/Items/2_Cloth";
     private const string PantPath = "SPUM/SPUM_Sprites/Items/3_Pant";
