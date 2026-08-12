@@ -1142,6 +1142,49 @@ Transform:
   - {fileID: 1271068753}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1677399017 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8752446609412946587, guid: 9a49c2890da7ad749a0aeb858eb397af, type: 3}
+  m_PrefabInstance: {fileID: 2613173193601488715}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1677399020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677399017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa58fad4ce7fb34f9f0f54df2c9bf33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyStatManager
+  statAttackPower: 0
+  statMagicPower: 0
+  statAgility: 0
+  statHealth: 0
+  statWillPower: 0
+  statStamina: 0
+  attackPowerRate: 5
+  attackPower: 0
+  magicPowerRate: 5
+  magicPower: 0
+  maxHPRate: 10
+  maxHP: 0
+  currentHP: 0
+  maxMPRate: 10
+  maxMP: 0
+  currentMP: 0
+  maxSTRate: 10
+  stRecoveryAmountRate: 2
+  checkInterval: 1.5
+  maxST: 0
+  currentST: 0
+  deathExp: 0
+  dropGoldMin: 0
+  dropGoldMax: 0
+  playerStatManager: {fileID: 0}
+  InventoryManager: {fileID: 0}
 --- !u!1 &1710037589
 GameObject:
   m_ObjectHideFlags: 0
@@ -1389,7 +1432,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8752446609412946587, guid: 9a49c2890da7ad749a0aeb858eb397af, type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 1677399020}
   m_SourcePrefab: {fileID: 100100000, guid: 9a49c2890da7ad749a0aeb858eb397af, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
