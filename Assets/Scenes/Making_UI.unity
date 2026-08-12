@@ -5210,6 +5210,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2585291683982116248, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 1799160749}
+    - targetCorrespondingSourceObject: {fileID: 2585291683982116248, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 70591137}
     - targetCorrespondingSourceObject: {fileID: 7961750292144418417, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
@@ -5219,6 +5222,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 358628312}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2750312420938659318, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1733800718}
     - targetCorrespondingSourceObject: {fileID: 1851985856437256121, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 75853266}
@@ -23448,6 +23454,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1720980389}
   m_CullTransparentMesh: 1
+--- !u!1 &1733800717 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2750312420938659318, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
+  m_PrefabInstance: {fileID: 566552932}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1733800718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1733800717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d69b9576a4ee5443ba831fdfec54167, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DontDestroy
+  gameObject: {fileID: 1733800717}
 --- !u!1 &1776920912
 GameObject:
   m_ObjectHideFlags: 0
@@ -23942,7 +23966,7 @@ RectTransform:
   - {fileID: 762915379}
   - {fileID: 497704487}
   - {fileID: 1435998203}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 518266104}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -25987,7 +26011,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 619394802}
-  - {fileID: 1799160749}
   - {fileID: 566552932}
   - {fileID: 959009073}
   - {fileID: 1432365065}
