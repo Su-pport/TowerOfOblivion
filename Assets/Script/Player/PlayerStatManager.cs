@@ -74,6 +74,7 @@ public class PlayerStatManager : Stat
         {
             SceneManager.LoadScene("EnemyScene");
         }
+        
     }
 
     
