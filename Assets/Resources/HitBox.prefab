@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8640188202326502695
+--- !u!1 &1114475971798555145
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,24 +8,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 536163355349502019}
-  - component: {fileID: 7960658301743058768}
-  - component: {fileID: 8649234877931440201}
-  - component: {fileID: 3275337133185233637}
+  - component: {fileID: 712896262971626063}
+  - component: {fileID: 4814701292523598918}
+  - component: {fileID: 8118921092526095673}
+  - component: {fileID: 3655647908715042040}
   m_Layer: 7
-  m_Name: HurtBox
+  m_Name: HitBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &536163355349502019
+--- !u!4 &712896262971626063
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8640188202326502695}
+  m_GameObject: {fileID: 1114475971798555145}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -34,25 +34,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7960658301743058768
+--- !u!114 &4814701292523598918
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8640188202326502695}
+  m_GameObject: {fileID: 1114475971798555145}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2c87bcff71ec2c43aec58a64334dd53, type: 3}
+  m_Script: {fileID: 11500000, guid: ac0e8c1aa1afdc241a32cdf55402d01a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HurtBox
---- !u!70 &8649234877931440201
+  m_EditorClassIdentifier: Assembly-CSharp::HitBox
+  layermask:
+    serializedVersion: 2
+    m_Bits: 128
+  hurtbox: {fileID: 0}
+--- !u!70 &8118921092526095673
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8640188202326502695}
+  m_GameObject: {fileID: 1114475971798555145}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -80,19 +84,19 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.02009052, y: 0.32222247}
-  m_Size: {x: 0.27530563, y: 0.4931233}
+  m_Offset: {x: -0.055997193, y: 0.32222247}
+  m_Size: {x: 0.20349228, y: 0.4931233}
   m_Direction: 0
---- !u!114 &3275337133185233637
+--- !u!114 &3655647908715042040
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8640188202326502695}
+  m_GameObject: {fileID: 1114475971798555145}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31f0efcdbd72e5643a4a3d33fcb510a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CheckCollider
-  objectColor: {r: 0.34648287, g: 1, b: 0, a: 1}
+  objectColor: {r: 1, g: 0, b: 0, a: 1}

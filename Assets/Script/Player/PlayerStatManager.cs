@@ -8,8 +8,14 @@ public class PlayerStatManager : Stat
     [SerializeField] private int LVupGetPoint = 4; // 레벨 업 시 얻는 스텟 포인트
     [HideInInspector] public int statPoint = 0; // 사용하지 않은 스텟 포인트
 
+    //레벨업 
+    [SerializeField] private LevelData leveldata;
+    private int currentLevel = 1;
+    private int currentExp = 0;
+
     //읽기 전용 변수
     public float _moveSpeedRate => moveSpeedRate;
+
     // ******* 임시
     [SerializeField] private float plusminus = 10.0f;
 
@@ -68,14 +74,9 @@ public class PlayerStatManager : Stat
         {
             SceneManager.LoadScene("EnemyScene");
         }
-
     }
 
-    public void LevelUp()
-    {
-        statPoint += LVupGetPoint;
-        return ;
-    }
+    
 
     // 스테미너
     // 스테미너 회복 함수
@@ -127,6 +128,24 @@ public class PlayerStatManager : Stat
             Debug.Log(currentST + "/" + maxST);
             initialized = false;
             return true;
+        }
+    }
+
+    // 레벨업 시스템
+    public void LevelUp()
+    {
+        currentExp -= leveldata.levels[currentLevel - 1].expRequired;
+        currentLevel++;
+        statPoint += LVupGetPoint;
+        Debug.Log("레벨업! 현재 레벨: "+currentLevel);
+    }
+
+    public void AddExp(int amount)
+    {
+        currentExp += amount;
+        if(currentExp >= leveldata.levels[currentLevel - 1].expRequired)
+        {
+            LevelUp();
         }
     }
 }
