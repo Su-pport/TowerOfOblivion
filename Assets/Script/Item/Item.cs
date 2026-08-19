@@ -18,26 +18,3 @@ public abstract class Item : ScriptableObject {
     public string description; // 설명
     public int sellValue; // 판매가격
 }
-
-[CreateAssetMenu(menuName="Game/Item/Weapon")]
-public class WeaponItem : Item {
-    public int attackPower;
-    public int magitPower;
-    public float attackSpeed;
-}
-
-[CreateAssetMenu(menuName="Game/Item/Armor")]
-public class ArmorItem : Item {
-    public int defensePower;
-}
-
-[CreateAssetMenu(menuName="Game/Item/Accessory")]
-public class Accessory : Item
-{
-    
-}
-
-[CreateAssetMenu(menuName="Game/Item/Consumable")]
-public class ConsumableItem : Item {
-    public int healAmount;
-}

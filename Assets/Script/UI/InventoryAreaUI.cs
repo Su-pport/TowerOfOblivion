@@ -78,6 +78,10 @@ public class InventoryAreaUI : MonoBehaviour
     {
         for(int i = 0; i<inventoryManager.currentItemCount; i++) {
             buttons[i].transform.Find("ItemIcon").GetComponent<Image>().sprite = inventoryManager.items[i].icon;
+            if (inventoryManager.items[i].itemCode < 300)
+            {
+                buttons[i].transform.Find("ItemIcon").GetComponent<Image>().transform.localRotation = Quaternion.Euler(0, 0, -45);
+            }
         }
     }
 }
