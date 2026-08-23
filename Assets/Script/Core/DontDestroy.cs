@@ -4,7 +4,6 @@ using UnityEngine;
 public class DontDestroy : MonoBehaviour
 {
     private static DontDestroy instance;
-    public GameObject gameObject;
 
     private void Awake()
     {

@@ -63,9 +63,17 @@ public class Map : MonoBehaviour
     [Min(1)][SerializeField] private int nearbyConnectionDistance = 18;
 
     [Header("Spawning (Optional)")]
-    [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject monsterPrefab;
     [Min(0)][SerializeField] private int monsterCount = 6;
+
+    [Header("Portal (Optional)")]
+    [Tooltip("Prefab to instantiate as a portal. Create a prefab with the Portal component and assign it here.")]
+    [SerializeField] private GameObject portalPrefab;
+    [SerializeField] private bool spawnPortal = true;
+
+    [Header("Player Placement")]
+    [Tooltip("When enabled, the Map will move the Player (tag 'Player') to a random room after generation.")]
+    [SerializeField] private bool placePlayerInRandomRoom = true;
 
     private enum RoomSide { Top, Bottom, Left, Right }
 
@@ -82,17 +90,301 @@ public class Map : MonoBehaviour
     public bool[,] Discovered => discovered;
     public IReadOnlyList<Room> Rooms => rooms;
 
-    private void Start() => GenerateMap();
+    private bool hasGenerated;
+
+    // Convert a world position to map cell coordinates using the floor tilemap.
+    public Vector2Int WorldToCell(Vector3 worldPos)
+    {
+        if (floorTilemap == null)
+        {
+            Debug.LogWarning("Map.WorldToCell: floorTilemap is null, using simple calculation", this);
+            return new Vector2Int(Mathf.FloorToInt(worldPos.x), Mathf.FloorToInt(worldPos.y));
+        }
+
+        Vector3Int cell = floorTilemap.WorldToCell(worldPos);
+        Debug.Log($"Map.WorldToCell: world={worldPos} -> cell={cell.x},{cell.y}", this);
+        return new Vector2Int(cell.x, cell.y);
+    }
+
+    private void Start()
+{
+    EnsureTilemaps();
+    // If this Map belongs to a TowerFloor and a TowerManager exists,
+    // let the TowerManager control generation to ensure player spawn
+    // ordering (TowerManager will call GenerateMapForce()).
+    var parentFloor = GetComponentInParent<TowerFloor>();
+    var manager = Object.FindFirstObjectByType<TowerManager>();
+    if (parentFloor != null && manager != null)
+        return;
+
+    GenerateMap();
+}
+
+    /// <summary>
+    /// 런타임 또는 프리팹에서 Tilemap 참조가 누락된 경우 자동으로 Grid와 Tilemap들을 생성/할당합니다.
+    /// (프리팹으로 관리할 때 씬에 의존적인 Tilemap 참조가 빠지는 문제를 완화)
+    /// </summary>
+    private void EnsureTilemaps()
+    {
+        if (backgroundTilemap != null && floorTilemap != null && wallRenderTilemap != null)
+            return;
+
+        // 1) 자식에서 이름으로 찾아보기
+        Tilemap[] found = GetComponentsInChildren<Tilemap>(true);
+        foreach (Tilemap t in found)
+        {
+            string n = t.gameObject.name.ToLower();
+            if (backgroundTilemap == null && n.Contains("background"))
+                backgroundTilemap = t;
+            else if (floorTilemap == null && n.Contains("floor"))
+                floorTilemap = t;
+            else if (wallRenderTilemap == null && (n.Contains("wall") || n.Contains("wallrender")))
+                wallRenderTilemap = t;
+        }
+
+        // 2) 아직 누락된 경우 Grid 및 Tilemap 생성
+        if (backgroundTilemap != null && floorTilemap != null && wallRenderTilemap != null)
+            return;
+
+        // If this Map is part of a prefab asset (not a scene instance), do not
+        // create GameObjects to avoid modifying prefab assets at edit-time.
+        Transform gridT = transform.Find("Grid");
+        GameObject gridGO = null;
+        if (gridT == null)
+        {
+            if (!gameObject.scene.IsValid())
+            {
+                Debug.LogWarning("Map.EnsureTilemaps: Map is a prefab asset; skipping runtime Tilemap creation.", this);
+                return;
+            }
+
+            gridGO = new GameObject("Grid");
+            gridGO.transform.SetParent(transform, false);
+            gridGO.transform.localPosition = Vector3.zero;
+            gridGO.AddComponent<Grid>();
+        }
+        else
+        {
+            gridGO = gridT.gameObject;
+            // Ensure Grid position is at origin
+            gridGO.transform.localPosition = Vector3.zero;
+        }
+
+        Tilemap CreateTilemapChild(string name)
+        {
+            Transform child = gridGO.transform.Find(name);
+            if (child != null)
+            {
+                Tilemap existing = child.GetComponent<Tilemap>();
+                if (existing != null) return existing;
+            }
+
+            GameObject go = new GameObject(name);
+            go.transform.SetParent(gridGO.transform, false);
+            go.transform.localPosition = Vector3.zero;
+            Tilemap tm = go.AddComponent<Tilemap>();
+            var tmRenderer = go.AddComponent<TilemapRenderer>();
+            
+            // Set proper sorting order
+            if (name.Contains("Background"))
+                tmRenderer.sortingOrder = 0;
+            else if (name.Contains("Floor"))
+                tmRenderer.sortingOrder = 1;
+            else if (name.Contains("Wall"))
+                tmRenderer.sortingOrder = 2;
+            
+            // Add Tilemap Collider 2D for wall and floor tilemaps to enable collision
+            if (name.Contains("Wall") || name.Contains("Floor"))
+            {
+                var collider = go.AddComponent<TilemapCollider2D>();
+                collider.compositeOperation = Collider2D.CompositeOperation.None;
+                collider.isTrigger = name.Contains("Floor"); // Floor is walkable (trigger)
+            }
+            
+            return tm;
+        }
+
+        if (backgroundTilemap == null)
+            backgroundTilemap = CreateTilemapChild("BackgroundTilemap");
+
+        if (floorTilemap == null)
+            floorTilemap = CreateTilemapChild("FloorTilemap");
+
+        if (wallRenderTilemap == null)
+            wallRenderTilemap = CreateTilemapChild("WallRenderTilemap");
+    }
 
     public void GenerateMap()
+{
+        // 한 번 생성된 층은 다시 생성하지 않는다.
+        if (hasGenerated)
+        {
+            return;
+        }
+
+    ClearPreviousMap();
+    InitializeMapData();
+    CreateDungeon();
+    CreateWalls();
+    CreateCornerWalls();
+    DrawMap();
+    // 플레이어를 랜덤 방으로 배치한 뒤 몬스터/포탈 스폰
+    if (placePlayerInRandomRoom)
+        PlacePlayerInRandomRoom();
+
+    SpawnActors();
+    SpawnPortalAtFarthestRoom();
+
+    hasGenerated = true;
+}   
+
+    [ContextMenu("Generate Map (Editor)")]
+    public void EditorGenerateMap()
     {
-        ClearPreviousMap();
-        InitializeMapData();
-        CreateDungeon();
-        CreateWalls();
-        CreateCornerWalls();
-        DrawMap();
-        SpawnActors();
+        EnsureTilemaps();
+        GenerateMap();
+    }
+
+    /// <summary>
+    /// Force a map generation at runtime even if this Map previously
+    /// generated. Useful when Tilemaps or the Map component were removed
+    /// from the Hierarchy and need to be recreated.
+    /// </summary>
+    public void GenerateMapForce()
+    {
+        hasGenerated = false;
+        EnsureTilemaps();
+        GenerateMap();
+    }
+
+    // Copy serialized configuration from another Map (typically a prefab
+    // source) so a runtime instance can use the same tiles and settings.
+    public void SetupFrom(Map src)
+    {
+        if (src == null) return;
+
+        // Copy TileBase references
+        this.blackTile = src.blackTile;
+        this.floorTile = src.floorTile;
+
+        this.topWallTile = src.topWallTile;
+        this.bottomWallTile = src.bottomWallTile;
+        this.leftWallTile = src.leftWallTile;
+        this.rightWallTile = src.rightWallTile;
+
+        this.outerCornerTopLeftTile = src.outerCornerTopLeftTile;
+        this.outerCornerTopRightTile = src.outerCornerTopRightTile;
+        this.outerCornerBottomLeftTile = src.outerCornerBottomLeftTile;
+        this.outerCornerBottomRightTile = src.outerCornerBottomRightTile;
+
+        this.innerCornerTopLeftTile = src.innerCornerTopLeftTile;
+        this.innerCornerTopRightTile = src.innerCornerTopRightTile;
+        this.innerCornerBottomLeftTile = src.innerCornerBottomLeftTile;
+        this.innerCornerBottomRightTile = src.innerCornerBottomRightTile;
+
+        // Copy map settings
+        this.mapWidth = src.mapWidth;
+        this.mapHeight = src.mapHeight;
+        this.maxDepth = src.maxDepth;
+        this.minNodeSize = src.minNodeSize;
+        this.minRoomSize = src.minRoomSize;
+        this.roomPadding = src.roomPadding;
+
+        this.createNearbySharedConnections = src.createNearbySharedConnections;
+        this.maximumNearbySharedConnections = src.maximumNearbySharedConnections;
+        this.nearbyConnectionDistance = src.nearbyConnectionDistance;
+
+        // Copy spawn/prefab settings
+        this.monsterPrefab = src.monsterPrefab;
+        this.monsterCount = src.monsterCount;
+        this.portalPrefab = src.portalPrefab;
+        this.spawnPortal = src.spawnPortal;
+        this.placePlayerInRandomRoom = src.placePlayerInRandomRoom;
+    }
+
+    private void SpawnPortalAtFarthestRoom()
+    {
+        // 디버그: 포탈 생성 조건 상태 출력
+        Debug.Log($"SpawnPortal: spawnPortal={spawnPortal}, portalPrefab={(portalPrefab!=null)}, rooms={rooms.Count}, floorTilemap={(floorTilemap!=null)}", this);
+        if (!spawnPortal || portalPrefab == null || rooms.Count == 0 || floorTilemap == null)
+        {
+            Debug.LogWarning("SpawnPortal: 조건 불충분하여 포탈 생성 생략.", this);
+            return;
+        }
+
+        TowerFloor parentFloor = GetComponentInParent<TowerFloor>();
+        Vector3 playerSpawn = Vector3.zero;
+        if (parentFloor != null && parentFloor.SpawnPoint != null)
+            playerSpawn = parentFloor.SpawnPoint.WorldPosition;
+
+        float bestDist = -1f;
+        Vector3 bestWorld = Vector3.zero;
+
+        foreach (Room room in rooms)
+        {
+            // Find any floor cell inside the room to place the portal on.
+            bool found = false;
+            for (int x = room.Bounds.xMin; x < room.Bounds.xMax && !found; x++)
+            {
+                for (int y = room.Bounds.yMin; y < room.Bounds.yMax; y++)
+                {
+                    if (IsFloor(x, y))
+                    {
+                        Vector3Int cell = new Vector3Int(x, y, 0);
+                        Vector3 worldCenter = floorTilemap.GetCellCenterWorld(cell);
+                        float d = Vector3.SqrMagnitude(worldCenter - playerSpawn);
+                        if (d > bestDist)
+                        {
+                            bestDist = d;
+                            bestWorld = worldCenter;
+                        }
+                        found = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (bestDist >= 0f)
+        {
+            // Avoid parenting to `transform` if this Map exists on a prefab asset
+            // (which causes "Setting the parent of a transform which resides in a Prefab Asset is disabled").
+            GameObject instance = Instantiate(portalPrefab, bestWorld, Quaternion.identity);
+            // Parent only if this Map's GameObject is part of a loaded scene.
+            if (this.gameObject != null && this.gameObject.scene.IsValid())
+            {
+                instance.transform.SetParent(this.transform, false);
+            }
+
+            spawnedObjects.Add(instance);
+            Debug.Log("SpawnPortal: instantiated portal at " + bestWorld, this);
+        }
+    }
+
+    private void PlacePlayerInRandomRoom()
+    {
+        if (rooms.Count == 0 || floorTilemap == null)
+        {
+            Debug.LogWarning("Map: PlacePlayerInRandomRoom failed - rooms.Count=" + rooms.Count + ", floorTilemap=" + (floorTilemap != null), this);
+            return;
+        }
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null)
+        {
+            Debug.LogWarning("Map: Player 태그를 가진 오브젝트를 찾을 수 없어 랜덤 스폰을 하지 않습니다.");
+            return;
+        }
+
+        Room chosen = rooms[Random.Range(0, rooms.Count)];
+        Vector2Int cell = chosen.GetRandomPosition();
+        Vector3 worldPos = floorTilemap.GetCellCenterWorld(new Vector3Int(cell.x, cell.y, 0));
+        
+        Debug.Log($"Map: PlacePlayerInRandomRoom - room bounds={chosen.Bounds}, cell={cell}", this);
+        Debug.Log($"  floorTilemap position={floorTilemap.transform.position}, GetCellCenterWorld({cell.x},{cell.y})={worldPos}", this);
+        Debug.Log($"  Map GameObject position={gameObject.transform.position}", this);
+        
+        player.transform.position = worldPos;
     }
 
     private void InitializeMapData()
@@ -437,11 +729,21 @@ public class Map : MonoBehaviour
             for (int y = 0; y < mapHeight; y++)
             {
                 Vector3Int cell = new Vector3Int(x, y, 0);
-                backgroundTilemap?.SetTile(cell, blackTile);
+                if (backgroundTilemap != null)
+                    backgroundTilemap.SetTile(cell, blackTile);
+                
                 if (mapData[x, y] == TileType.Floor)
-                    floorTilemap?.SetTile(cell, floorTile);
+                {
+                    if (floorTilemap != null)
+                        floorTilemap.SetTile(cell, floorTile);
+                }
                 else if (mapData[x, y] == TileType.Wall)
-                    wallRenderTilemap?.SetTile(cell, GetWallTile(x, y));
+                {
+                    if (wallRenderTilemap != null)
+                        wallRenderTilemap.SetTile(cell, GetWallTile(x, y));
+                    else
+                        Debug.LogError("DrawMap: wallRenderTilemap is NULL!", this);
+                }
             }
         }
     }
@@ -484,57 +786,60 @@ public class Map : MonoBehaviour
     private bool IsFloor(int x, int y) => IsInBounds(x, y) && mapData[x, y] == TileType.Floor;
     private bool IsNearFloor(int x, int y) => IsFloor(x + 1, y) || IsFloor(x - 1, y) || IsFloor(x, y + 1) || IsFloor(x, y - 1);
 
+    private Vector3 ToWorld(Vector2Int cell)
+    {
+        return new Vector3(cell.x + 0.5f, cell.y + 0.5f, 0f);
+    }
+
     private void SpawnActors()
     {
-        if (rooms.Count == 0)
+        if (rooms.Count == 0 || monsterPrefab == null || monsterCount == 0)
             return;
 
-        Room playerRoom = null;
-
-        // 기존 Player가 있다면 랜덤 방의 랜덤 위치로 이동
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-
-        if (player != null)
+        if (player == null)
         {
-            playerRoom = rooms[Random.Range(0, rooms.Count)];
-
-            Vector2Int spawnPosition = playerRoom.GetRandomPosition();
-            player.transform.position = ToWorld(spawnPosition);
+            Debug.LogWarning("Map: Player 태그를 가진 오브젝트가 없어 몬스터를 생성하지 않습니다.");
+            return;
         }
 
-        // Player가 없다면 아무것도 하지 않음
-        if (playerRoom == null)
-            return;
+        Vector2Int playerCell = WorldToCell(player.transform.position);
 
-        // Player가 있는 방을 제외하고 몬스터 생성
-        if (monsterPrefab == null || rooms.Count <= 1)
+        Room playerRoom = null;
+        foreach (Room room in rooms)
+        {
+            if (room.Bounds.Contains(playerCell))
+            {
+                playerRoom = room;
+                break;
+            }
+        }
+
+        if (playerRoom == null)
+        {
+            Debug.LogWarning("Map: Player가 이 층의 방 안에 있지 않아 몬스터를 생성하지 않습니다.");
+            return;
+        }
+
+        if (rooms.Count <= 1)
             return;
 
         for (int i = 0; i < monsterCount; i++)
         {
             Room monsterRoom;
-
             do
             {
                 monsterRoom = rooms[Random.Range(0, rooms.Count)];
             }
             while (monsterRoom == playerRoom);
 
-            Vector2Int position = monsterRoom.GetRandomPosition();
-
             spawnedObjects.Add(
-                Instantiate(
-                    monsterPrefab,
-                    ToWorld(position),
-                    Quaternion.identity
-                )
+                Instantiate(monsterPrefab, ToWorld(monsterRoom.GetRandomPosition()), Quaternion.identity)
             );
         }
     }
 
-    private Vector3 ToWorld(Vector2Int cell) => new Vector3(cell.x + 0.5f, cell.y + 0.5f, 0f);
-
-    private void ClearPreviousMap()
+    public void ClearPreviousMap()
     {
         backgroundTilemap?.ClearAllTiles();
         floorTilemap?.ClearAllTiles();
@@ -544,7 +849,21 @@ public class Map : MonoBehaviour
         spawnedObjects.Clear();
     }
 
-    public bool IsWalkable(Vector2Int position) => IsInBounds(position.x, position.y) && mapData[position.x, position.y] == TileType.Floor;
-    private bool IsInBounds(int x, int y) => x >= 0 && x < mapWidth && y >= 0 && y < mapHeight;
-    private int ManhattanDistance(Vector2Int a, Vector2Int b) => Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+    public bool IsWalkable(Vector2Int position) =>
+        IsInBounds(position.x, position.y) &&
+        mapData[position.x, position.y] == TileType.Floor;
+
+    public Vector3 GetRoomWorldPosition(Room room)
+    {
+        if (room == null)
+            return Vector3.zero;
+
+        return ToWorld(room.Center);
+    }
+
+private bool IsInBounds(int x, int y) =>
+    x >= 0 && x < mapWidth && y >= 0 && y < mapHeight;
+
+private int ManhattanDistance(Vector2Int a, Vector2Int b) =>
+    Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
 }

@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8385168128163727182
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4089295078615098751}
+  - component: {fileID: 4183363195017846929}
+  m_Layer: 0
+  m_Name: MapManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4089295078615098751
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8385168128163727182}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.74888, y: 0.14165, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4183363195017846929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8385168128163727182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ca7d7fb06a31e47afd9b66574a78c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Map
+  backgroundTilemap: {fileID: 0}
+  floorTilemap: {fileID: 0}
+  wallRenderTilemap: {fileID: 0}
+  blackTile: {fileID: 11400000, guid: bb5e9309e2dee2a4a87351ef07688834, type: 2}
+  floorTile: {fileID: 11400000, guid: 76b4706caef736147bffd5964e3ed7fd, type: 2}
+  topWallTile: {fileID: 11400000, guid: 96a115d6a9688264ea54203fed453a1d, type: 2}
+  bottomWallTile: {fileID: 11400000, guid: 99375ff04cbd30e4d8e61836e440c075, type: 2}
+  leftWallTile: {fileID: 11400000, guid: be7d0fbca4922504da4464cd9566e519, type: 2}
+  rightWallTile: {fileID: 11400000, guid: 1d2b70225c2e474419e6fda42613324f, type: 2}
+  outerCornerTopLeftTile: {fileID: 11400000, guid: e26930539a750b04c863f09fbccb7190, type: 2}
+  outerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  outerCornerBottomLeftTile: {fileID: 11400000, guid: b5a7ecc0d3ffbc84ea454ad0f2080506, type: 2}
+  outerCornerBottomRightTile: {fileID: 11400000, guid: 290b2680d47ee7c4586265253c3d15c5, type: 2}
+  innerCornerTopLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  mapWidth: 50
+  mapHeight: 50
+  maxDepth: 4
+  minNodeSize: 14
+  minRoomSize: 6
+  roomPadding: 2
+  createNearbySharedConnections: 1
+  maximumNearbySharedConnections: 2
+  nearbyConnectionDistance: 18
+  monsterPrefab: {fileID: 7913144085954027544, guid: 3f769c66d4ce6b044b1a8b89b1e7a81e, type: 3}
+  monsterCount: 5
+  portalPrefab: {fileID: 1865075403353370815, guid: e81fffe53ec2eab4bb9a7ae53eca052a, type: 3}
+  spawnPortal: 1

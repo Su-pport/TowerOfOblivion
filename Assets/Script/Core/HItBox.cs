@@ -15,7 +15,6 @@ public class HitBox : MonoBehaviour
             stat = GetComponentInParent<PlayerStatManager>();
         else if (GetComponentInParent<EnemyStatManager>())
             stat = GetComponentInParent<EnemyStatManager>();
-
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -31,6 +30,21 @@ public class HitBox : MonoBehaviour
 
     private void OnHit(HurtBox hurtBox)
     {
+        if (stat == null)
+        {
+            // Try to recover stat reference on hit; if still missing, abort.
+            if (GetComponentInParent<PlayerStatManager>() != null)
+                stat = GetComponentInParent<PlayerStatManager>();
+            else if (GetComponentInParent<EnemyStatManager>() != null)
+                stat = GetComponentInParent<EnemyStatManager>();
+
+            if (stat == null)
+            {
+                Debug.LogWarning("HitBox: stat reference missing, cannot apply damage.", this);
+                return;
+            }
+        }
+
         hurtBox.TakeDamage(stat.attackPower);
     }
 }

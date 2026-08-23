@@ -4700,11 +4700,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 712896262971626063, guid: b462eb0d487ee7443b74721df4c49ff1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.02702
+      value: -0.29
       objectReference: {fileID: 0}
     - target: {fileID: 712896262971626063, guid: b462eb0d487ee7443b74721df4c49ff1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.18904006
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: 712896262971626063, guid: b462eb0d487ee7443b74721df4c49ff1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6589,11 +6589,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2585291683982116248, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 0.018
       objectReference: {fileID: 0}
     - target: {fileID: 2585291683982116248, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1.371
+      value: 1.343
       objectReference: {fileID: 0}
     - target: {fileID: 2585291683982116248, guid: fbbbb314c4845e647b1e14ccc1bceaee, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -7770,11 +7770,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 536163355349502019, guid: ec4bcd154ae73c546b6604ee95328d4f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.74477
+      value: 0.03
       objectReference: {fileID: 0}
     - target: {fileID: 536163355349502019, guid: ec4bcd154ae73c546b6604ee95328d4f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.28226006
+      value: -0.08
       objectReference: {fileID: 0}
     - target: {fileID: 536163355349502019, guid: ec4bcd154ae73c546b6604ee95328d4f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -12984,7 +12984,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d69b9576a4ee5443ba831fdfec54167, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DontDestroy
-  gameObject: {fileID: 900856212}
 --- !u!4 &929264532 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 712896262971626063, guid: b462eb0d487ee7443b74721df4c49ff1, type: 3}
