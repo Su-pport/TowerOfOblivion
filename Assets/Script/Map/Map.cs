@@ -1498,9 +1498,14 @@ Debug.Log(
     /// </summary>
     public void ClearPreviousMap()
     {
-        backgroundTilemap?.ClearAllTiles();
-        floorTilemap?.ClearAllTiles();
-        wallRenderTilemap?.ClearAllTiles();
+        if (backgroundTilemap != null)
+        backgroundTilemap.ClearAllTiles();
+
+    if (floorTilemap != null)
+        floorTilemap.ClearAllTiles();
+
+    if (wallRenderTilemap != null)
+        wallRenderTilemap.ClearAllTiles();
 
         foreach (GameObject spawnedObject in spawnedObjects)
         {

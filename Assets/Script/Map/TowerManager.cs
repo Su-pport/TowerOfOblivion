@@ -11,7 +11,9 @@ public class TowerManager : MonoBehaviour
     [Header("Player")]
     [SerializeField] private string playerTag = "Player";
 
+    // 현재 층 이동 중인지 여부
     private bool isTransitioning;
+
 
     /// <summary>
     /// 게임 시작 시 층과 플레이어의 초기 상태를 설정합니다.
@@ -19,7 +21,8 @@ public class TowerManager : MonoBehaviour
     private void Awake()
     {
         Debug.Log(
-            "TowerManager Awake: starting InitializeFloors on " + gameObject.name,
+            "TowerManager Awake: starting InitializeFloors on " +
+            gameObject.name,
             this
         );
 
@@ -31,32 +34,80 @@ public class TowerManager : MonoBehaviour
         {
             Debug.LogError(
                 "TowerManager.InitializeFloors threw an exception: " +
-                ex.Message + "\n" + ex.StackTrace,
+                ex.Message + "\n" +
+                ex.StackTrace,
                 this
             );
         }
     }
 
+
     /// <summary>
     /// 지정한 층으로 이동하는 코루틴을 시작합니다.
+    /// 포탈에서 호출됩니다.
     /// </summary>
-    public void TravelToFloor(TowerFloor destination, GameObject player)
+    public void TravelToFloor(
+        TowerFloor destination,
+        GameObject player)
     {
         Debug.Log(
             "TowerManager.TravelToFloor called on " +
             gameObject.name +
             " active=" + gameObject.activeInHierarchy +
             " enabled=" + enabled +
-            " destination=" + (destination ? destination.name : "null") +
-            " player=" + (player ? player.name : "null"),
+            " isTransitioning=" + isTransitioning +
+            " destination=" +
+                (destination ? destination.name : "null") +
+            " player=" +
+                (player ? player.name : "null"),
             this
         );
 
-        if (isTransitioning || destination == null || player == null)
-            return;
+        // 이미 다른 층으로 이동 중이면 중복 요청을 무시합니다.
+        if (isTransitioning)
+        {
+            Debug.LogWarning(
+                "TowerManager: 이미 층 이동 중이라 요청을 무시합니다.",
+                this
+            );
 
-        StartCoroutine(TravelRoutine(destination, player));
+            return;
+        }
+
+        // 목적지 층이 없으면 이동할 수 없습니다.
+        if (destination == null)
+        {
+            Debug.LogError(
+                "TowerManager: destination이 null입니다.",
+                this
+            );
+
+            return;
+        }
+
+        // 플레이어가 없으면 이동할 수 없습니다.
+        if (player == null)
+        {
+            Debug.LogError(
+                "TowerManager: player가 null입니다.",
+                this
+            );
+
+            return;
+        }
+
+        Debug.Log(
+            "TowerManager: TravelRoutine 시작. " +
+            "destination=" + destination.name +
+            ", player=" + player.name,
+            this
+        );
+
+        StartCoroutine(
+            TravelRoutine(destination, player)
+        );
     }
+
 
     /// <summary>
     /// 씬에 존재하는 TowerFloor들을 찾고 시작 층을 활성화합니다.
@@ -64,38 +115,48 @@ public class TowerManager : MonoBehaviour
     /// </summary>
     private void InitializeFloors()
     {
-        // TowerManager 아래에 남아 있는 Grid는 좌표 충돌을 방지하기 위해 비활성화합니다.
+        // TowerManager 아래에 남아 있는 Grid는
+        // 좌표 충돌을 방지하기 위해 비활성화합니다.
         Transform gridT = transform.Find("Grid");
 
         if (gridT != null)
             gridT.gameObject.SetActive(false);
 
+
         // 씬에 존재하는 모든 TowerFloor를 찾습니다.
-        var allFloors = Resources.FindObjectsOfTypeAll<TowerFloor>();
+        var allFloors =
+            Resources.FindObjectsOfTypeAll<TowerFloor>();
 
-        TowerFloor[] foundFloors = System.Array.FindAll(
-            allFloors,
-            f => f != null &&
-                 f.gameObject != null &&
-                 f.gameObject.scene.IsValid()
-        );
+        TowerFloor[] foundFloors =
+            System.Array.FindAll(
+                allFloors,
+                f => f != null &&
+                     f.gameObject != null &&
+                     f.gameObject.scene.IsValid()
+            );
 
-        // 자동 검색에 실패하면 Inspector에 지정된 floors를 사용합니다.
-        if (foundFloors == null || foundFloors.Length == 0)
+
+        // 자동 검색에 실패하면
+        // Inspector에 지정된 floors를 사용합니다.
+        if (foundFloors == null ||
+            foundFloors.Length == 0)
         {
             TowerFloor[] validSerialized = null;
 
-            if (floors != null && floors.Length > 0)
+            if (floors != null &&
+                floors.Length > 0)
             {
-                validSerialized = System.Array.FindAll(
-                    floors,
-                    f => f != null &&
-                         f.gameObject != null &&
-                         f.gameObject.scene.IsValid()
-                );
+                validSerialized =
+                    System.Array.FindAll(
+                        floors,
+                        f => f != null &&
+                             f.gameObject != null &&
+                             f.gameObject.scene.IsValid()
+                    );
             }
 
-            if (validSerialized != null && validSerialized.Length > 0)
+            if (validSerialized != null &&
+                validSerialized.Length > 0)
             {
                 foundFloors = validSerialized;
             }
@@ -110,25 +171,38 @@ public class TowerManager : MonoBehaviour
             }
         }
 
+
         // 층 번호 순서로 정렬합니다.
         System.Array.Sort(
             foundFloors,
-            (a, b) => a.FloorNumber.CompareTo(b.FloorNumber)
+            (a, b) =>
+                a.FloorNumber.CompareTo(b.FloorNumber)
         );
 
-        // 찾은 층 목록을 런타임 floors 배열에 반영합니다.
-        if (floors == null || floors.Length != foundFloors.Length)
-            floors = foundFloors;
 
-        // 시작 층이 지정되지 않았다면 1층을 우선 사용합니다.
+        // 찾은 층 목록을 런타임 floors 배열에 반영합니다.
+        if (floors == null ||
+            floors.Length != foundFloors.Length)
+        {
+            floors = foundFloors;
+        }
+
+
+        // 시작 층이 지정되지 않았다면
+        // 1층을 우선 사용합니다.
         if (startingFloor == null)
         {
             startingFloor =
-                System.Array.Find(foundFloors, f => f.FloorNumber == 1)
+                System.Array.Find(
+                    foundFloors,
+                    f => f.FloorNumber == 1
+                )
                 ?? foundFloors[0];
         }
 
-        // 모든 층의 Map 참조를 확보하고 시작 층만 활성화합니다.
+
+        // 모든 층의 Map 참조를 확보하고
+        // 시작 층만 활성화합니다.
         foreach (TowerFloor floor in foundFloors)
         {
             if (floor == null)
@@ -136,58 +210,70 @@ public class TowerManager : MonoBehaviour
 
             floor.EnsureMapReference();
 
-            bool shouldBeActive = floor == startingFloor;
+            bool shouldBeActive =
+                floor == startingFloor;
 
-            if (floor.gameObject.activeSelf != shouldBeActive)
-                floor.gameObject.SetActive(shouldBeActive);
+            if (floor.gameObject.activeSelf !=
+                shouldBeActive)
+            {
+                floor.gameObject.SetActive(
+                    shouldBeActive
+                );
+            }
         }
 
+
         // 플레이어를 찾습니다.
-        GameObject player = GameObject.FindGameObjectWithTag(playerTag);
+        GameObject player =
+            GameObject.FindGameObjectWithTag(playerTag);
 
         if (player == null)
         {
             Debug.LogError(
-                "TowerManager: Player 태그를 가진 오브젝트를 찾을 수 없습니다.",
+                "TowerManager: Player 태그를 가진 " +
+                "오브젝트를 찾을 수 없습니다.",
                 this
             );
 
             return;
         }
 
+
+        // 시작 층의 SpawnPoint가 있는지 확인합니다.
         if (startingFloor.SpawnPoint == null)
         {
             Debug.LogError(
-                "TowerManager: Starting Floor에 SpawnPoint가 없습니다.",
+                "TowerManager: Starting Floor에 " +
+                "SpawnPoint가 없습니다.",
                 startingFloor
             );
 
             return;
         }
 
-        // Map이 프리팹에서 참조된 경우 런타임 Map을 생성합니다.
-        if (startingFloor.Map != null &&
-            !startingFloor.Map.gameObject.scene.IsValid())
-        {
-            Map prefabMap = startingFloor.Map;
 
-            Map newMap = startingFloor.gameObject.AddComponent<Map>();
-            newMap.SetupFrom(prefabMap);
+        // Map이 프리팹에서 참조된 경우 런타임 Map으로 교체합니다.
+        startingFloor.EnsureRuntimeMap();
 
-            startingFloor.AssignMap(newMap);
-        }
 
         // 맵을 생성합니다.
-        // 플레이어 위치는 Map.GenerateMap() 내부에서 랜덤 방으로 결정됩니다.
+        // 플레이어 위치는 Map.GenerateMap() 내부에서
+        // 랜덤 방으로 결정됩니다.
         if (startingFloor.Map != null)
+        {
             startingFloor.Map.GenerateMapForce();
+        }
 
-        // 맵 생성 후 플레이어가 실제 방 안에 배치되었는지 확인합니다.
+
+        // 맵 생성 후 플레이어가 실제 방 안에
+        // 배치되었는지 확인합니다.
         if (startingFloor.Map != null &&
             startingFloor.Map.Rooms.Count > 0)
         {
             Vector2Int playerCell =
-                startingFloor.Map.WorldToCell(player.transform.position);
+                startingFloor.Map.WorldToCell(
+                    player.transform.position
+                );
 
             bool playerInRoom = false;
 
@@ -215,14 +301,17 @@ public class TowerManager : MonoBehaviour
                     $"TowerManager: player NOT in any room. " +
                     $"Position: {player.transform.position}, " +
                     $"Cell: {playerCell}. " +
-                    $"Total rooms: {startingFloor.Map.Rooms.Count}",
+                    $"Total rooms: " +
+                    $"{startingFloor.Map.Rooms.Count}",
                     this
                 );
             }
         }
 
+
         // TowerManager 아래에 잘못 배치된 Map을 비활성화합니다.
-        var ownMaps = GetComponentsInChildren<Map>(true);
+        var ownMaps =
+            GetComponentsInChildren<Map>(true);
 
         foreach (var map in ownMaps)
         {
@@ -234,7 +323,8 @@ public class TowerManager : MonoBehaviour
             foreach (var floor in floors)
             {
                 if (floor != null &&
-                    map.transform.IsChildOf(floor.transform))
+                    map.transform.IsChildOf(
+                        floor.transform))
                 {
                     underAnyFloor = true;
                     break;
@@ -245,11 +335,14 @@ public class TowerManager : MonoBehaviour
                 map.enabled = false;
         }
 
-        // TowerManager 아래에 남아 있는 잘못된 TilemapRenderer를 비활성화합니다.
+
+        // TowerManager 아래에 남아 있는
+        // 잘못된 TilemapRenderer를 비활성화합니다.
         var ownTilemapRenderers =
             GetComponentsInChildren<TilemapRenderer>(true);
 
-        foreach (var tilemapRenderer in ownTilemapRenderers)
+        foreach (var tilemapRenderer
+                 in ownTilemapRenderers)
         {
             if (tilemapRenderer == null)
                 continue;
@@ -259,23 +352,31 @@ public class TowerManager : MonoBehaviour
             foreach (var floor in floors)
             {
                 if (floor != null &&
-                    tilemapRenderer.transform.IsChildOf(floor.transform))
+                    tilemapRenderer.transform.IsChildOf(
+                        floor.transform))
                 {
                     underAnyFloor = true;
                     break;
                 }
             }
 
-            if (!underAnyFloor && tilemapRenderer.enabled)
+            if (!underAnyFloor &&
+                tilemapRenderer.enabled)
+            {
                 tilemapRenderer.enabled = false;
+            }
         }
 
+
         // 여기서 SpawnPoint로 플레이어를 이동시키지 않습니다.
-        // 플레이어 위치는 Map.GenerateMap()의 랜덤 방 배치를 그대로 사용합니다.
+        // 플레이어 위치는 Map.GenerateMap()의
+        // 랜덤 방 배치를 그대로 사용합니다.
     }
 
+
     /// <summary>
-    /// 목적지 층으로 이동하고 한 프레임 후 이동 상태를 해제합니다.
+    /// 목적지 층으로 이동하고
+    /// 한 프레임 후 이동 상태를 해제합니다.
     /// </summary>
     private IEnumerator TravelRoutine(
         TowerFloor destination,
@@ -283,27 +384,83 @@ public class TowerManager : MonoBehaviour
     {
         isTransitioning = true;
 
-        ActivateFloor(
-            destination,
-            player.transform
+        Debug.Log(
+            "TowerManager: TravelRoutine 실행됨. " +
+            "destination=" + destination.name +
+            ", player=" + player.name,
+            this
         );
 
+        try
+        {
+            ActivateFloor(
+                destination,
+                player.transform
+            );
+        }
+        catch (System.Exception ex)
+        {
+            // ActivateFloor에서 예외가 발생해도
+            // isTransitioning이 영원히 true로 남지 않도록 합니다.
+            Debug.LogError(
+                "TowerManager: ActivateFloor 실행 중 " +
+                "예외 발생\n" +
+                ex.Message + "\n" +
+                ex.StackTrace,
+                this
+            );
+        }
+
+        // 한 프레임 대기합니다.
         yield return null;
 
         isTransitioning = false;
+
+        Debug.Log(
+            "TowerManager: 층 이동 완료. " +
+            "isTransitioning=false",
+            this
+        );
     }
 
+
     /// <summary>
-    /// 기존 층을 정리하고 목적지 층을 활성화한 뒤 맵을 새로 생성합니다.
+    /// 기존 층을 정리하고 목적지 층을 활성화한 뒤
+    /// 맵을 새로 생성합니다.
     /// 플레이어는 새 맵의 랜덤 방에 배치됩니다.
     /// </summary>
     private void ActivateFloor(
         TowerFloor destination,
         Transform player)
     {
-        if (destination == null)
-            return;
+        Debug.Log(
+            "TowerManager: ActivateFloor 시작. " +
+            "destination=" +
+                (destination != null
+                    ? destination.name
+                    : "null") +
+            ", player=" +
+                (player != null
+                    ? player.name
+                    : "null"),
+            this
+        );
 
+
+        // 목적지 층이 없으면 종료합니다.
+        if (destination == null)
+        {
+            Debug.LogError(
+                "TowerManager: ActivateFloor의 " +
+                "destination이 null입니다.",
+                this
+            );
+
+            return;
+        }
+
+
+        // 목적지 층에 SpawnPoint가 있는지 확인합니다.
         if (destination.SpawnPoint == null)
         {
             Debug.LogError(
@@ -316,16 +473,19 @@ public class TowerManager : MonoBehaviour
             return;
         }
 
+
         // 씬에 존재하는 모든 층을 가져옵니다.
         var allFloorsAll =
             Resources.FindObjectsOfTypeAll<TowerFloor>();
 
-        TowerFloor[] allFloors = System.Array.FindAll(
-            allFloorsAll,
-            f => f != null &&
-                 f.gameObject != null &&
-                 f.gameObject.scene.IsValid()
-        );
+        TowerFloor[] allFloors =
+            System.Array.FindAll(
+                allFloorsAll,
+                f => f != null &&
+                     f.gameObject != null &&
+                     f.gameObject.scene.IsValid()
+            );
+
 
         Debug.Log(
             "ActivateFloor: destination=" +
@@ -335,7 +495,9 @@ public class TowerManager : MonoBehaviour
             this
         );
 
-        // 목적지를 제외한 다른 층의 맵과 오브젝트를 정리합니다.
+
+        // 목적지를 제외한 다른 층의
+        // 맵과 오브젝트를 정리합니다.
         foreach (TowerFloor floor in allFloors)
         {
             if (floor == null)
@@ -369,6 +531,7 @@ public class TowerManager : MonoBehaviour
             }
         }
 
+
         // 목적지 층을 활성화합니다.
         if (!destination.gameObject.activeSelf)
         {
@@ -382,16 +545,20 @@ public class TowerManager : MonoBehaviour
             );
         }
 
-        // 목적지 층에 속한 TilemapRenderer만 활성화합니다.
+
+        // 목적지 층에 속한 TilemapRenderer만
+        // 활성화합니다.
         var allTms =
             Resources.FindObjectsOfTypeAll<TilemapRenderer>();
 
-        TilemapRenderer[] tms = System.Array.FindAll(
-            allTms,
-            t => t != null &&
-                 t.gameObject != null &&
-                 t.gameObject.scene.IsValid()
-        );
+        TilemapRenderer[] tms =
+            System.Array.FindAll(
+                allTms,
+                t => t != null &&
+                     t.gameObject != null &&
+                     t.gameObject.scene.IsValid()
+            );
+
 
         Debug.Log(
             "ActivateFloor: found TilemapRenderers=" +
@@ -399,17 +566,22 @@ public class TowerManager : MonoBehaviour
             this
         );
 
+
         foreach (var tilemapRenderer in tms)
         {
             if (tilemapRenderer == null)
                 continue;
 
             bool shouldEnable =
-                tilemapRenderer.transform.IsChildOf(destination.transform);
+                tilemapRenderer.transform.IsChildOf(
+                    destination.transform
+                );
 
-            if (tilemapRenderer.enabled != shouldEnable)
+            if (tilemapRenderer.enabled !=
+                shouldEnable)
             {
-                tilemapRenderer.enabled = shouldEnable;
+                tilemapRenderer.enabled =
+                    shouldEnable;
 
                 Debug.Log(
                     "ActivateFloor: set TilemapRenderer '" +
@@ -421,21 +593,64 @@ public class TowerManager : MonoBehaviour
             }
         }
 
-        // 목적지 층의 Map을 확보하고 새 맵을 생성합니다.
+
+        // 목적지 층의 Map 참조를 확보합니다.
+        Debug.Log(
+            "ActivateFloor: 목적지 층의 Map 참조 확인 시작. " +
+            "floor=" + destination.name +
+            ", currentMap=" +
+            (destination.Map != null
+                ? destination.Map.name
+                : "NULL"),
+            this
+        );
+
+        destination.EnsureRuntimeMap();
         destination.EnsureMapReference();
 
+
+        Debug.Log(
+            "ActivateFloor: EnsureMapReference 완료. " +
+            "map=" +
+            (destination.Map != null
+                ? destination.Map.name
+                : "NULL"),
+            this
+        );
+
+
+        // 목적지 층의 맵을 새로 생성합니다.
         if (destination.Map != null)
         {
             Debug.Log(
-                "ActivateFloor: ensuring tilemaps and forcing GenerateMap on " +
+                "ActivateFloor: ensuring tilemaps and " +
+                "forcing GenerateMap on " +
                 destination.name,
                 this
             );
 
             destination.Map.GenerateMapForce();
+
+            Debug.Log(
+                "ActivateFloor: GenerateMapForce 완료. " +
+                "destination=" + destination.name,
+                this
+            );
+        }
+        else
+        {
+            Debug.LogError(
+                "ActivateFloor: 목적지 층 '" +
+                destination.name +
+                "'에 Map이 없습니다.",
+                destination
+            );
         }
 
-        // GenerateMapForce()가 플레이어를 랜덤 방에 배치하므로
-        // 여기서는 SpawnPoint로 플레이어를 다시 이동시키지 않습니다.
+
+        // GenerateMapForce()가 플레이어를
+        // 랜덤 방에 배치하므로
+        // 여기서는 SpawnPoint로 플레이어를
+        // 다시 이동시키지 않습니다.
     }
 }
