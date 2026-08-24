@@ -10,6 +10,7 @@ public enum ItemType {
 
 [CreateAssetMenu(menuName="Game/Item")]
 public abstract class Item : ScriptableObject {
+    public ItemType itemType;
     [Tooltip("0~99: 근접무기, 100~199: 활, 200~299: 마법무기, 300~399: 헬멧, 400~499 갑옷, 500~599: 장신구, 600~699: 소비아이템")]
     public int itemCode; //아이템코드
     [Tooltip("작명법: itemCode_itemName")]

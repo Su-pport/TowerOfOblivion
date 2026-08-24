@@ -4,6 +4,8 @@ using TMPro;
 
 public class InventoryDescAreaUI : MonoBehaviour
 {
+    [SerializeField] InventoryAreaUI inventoryAreaUI;
+
     [SerializeField] Image selectedItemIcon; //선택한 아이템의 이미지가 보이는 곳
     [SerializeField] Transform selectedItemIconTransform; 
     [SerializeField] TextMeshProUGUI DescText;
@@ -28,7 +30,6 @@ public class InventoryDescAreaUI : MonoBehaviour
     public void GetSelectedItem(Item item)
     {
         selectedItem = item;
-        Debug.Log(item.itemName);
         ShowSelectedItemIcon();
         ShowItemDesc();
     }
@@ -51,8 +52,12 @@ public class InventoryDescAreaUI : MonoBehaviour
     private void ShowItemDesc()
     {
         DescText.text = selectedItem.itemName + "\n" + selectedItem.description;
+        Debug.Log(selectedItem.itemName + "\n" + selectedItem.description);
     }
 
-
+    public void ClickedEquipButton()
+    {
+        inventoryAreaUI.ClickedEquipButton(selectedItem);
+    }
     
 }

@@ -95,5 +95,17 @@ public class InventoryAreaUI : MonoBehaviour
     {
         inventoryDescAreaUI.GetSelectedItem(item);
     }
+
+    public void ClickedEquipButton(Item item)
+    {
+        EquipResult result;
+        result = inventoryManager.EquipItem(item);
+
+        switch (result)
+        {
+            // 장착한 아이템 보이게 하기
+            default:
+        }
+    }
 }
     

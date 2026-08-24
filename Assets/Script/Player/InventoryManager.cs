@@ -2,6 +2,17 @@ using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 
+public enum EquipResult
+{
+    StatNotEnough,
+    WeaponEquipped,
+    HelmetEquipped,
+    ChestPlateEquipped,
+    AccessoryEquipped,
+    NotEquipment,
+    Unknown
+}
+
 public class InventoryManager : MonoBehaviour {
     public InventoryAreaUI inventoryAreaUI;
 
@@ -13,7 +24,7 @@ public class InventoryManager : MonoBehaviour {
     // 장비 슬롯
     public Item equippedWeapon;
     public Item equippedHelmet;
-    public Item equippedArmor;
+    public Item equippedChestPlate;
     public Item equippedAccessory;
 
     [SerializeField] private int maxInventorySize = 42;
@@ -70,8 +81,54 @@ public class InventoryManager : MonoBehaviour {
         }
     }
 
+    // 골드 관리
     public void AddGold(int amount)
     {
         currentMoney += amount;
     }
+
+    // 아이템 장착 
+    public EquipResult EquipItem(Item item)
+    {
+        if(item.itemType!= ItemType.Weapon && item.itemType != ItemType.Armor && item.itemType != ItemType.Accessory)
+            return EquipResult.NotEquipment;
+
+        if(!CheckRequireStat())
+            return EquipResult.StatNotEnough;
+
+        switch (item.itemType)
+        {
+            case ItemType.Weapon:
+                equippedWeapon = item;
+                return EquipResult.WeaponEquipped;
+
+            case ItemType.Armor:
+                if (300 <= item.itemCode && item.itemCode < 400)
+                {
+                    equippedHelmet = item;
+                    return EquipResult.HelmetEquipped;
+                }
+                else if (item.itemCode < 500)
+                {
+                    equippedChestPlate = item;
+                    return EquipResult.ChestPlateEquipped;
+                }
+                else
+                    return EquipResult.Unknown;
+            
+            case ItemType.Accessory:
+                equippedAccessory = item;
+                return EquipResult.AccessoryEquipped;
+
+            default:
+                return EquipResult.Unknown;
+        }
+        
+    }
+
+    private bool CheckRequireStat() // 요구스탯 확인
+    {
+        return true;
+    }
+
 }
