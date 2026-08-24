@@ -102,11 +102,9 @@ public class PlayerStatManager : Stat
                 if (timer >= checkInterval) // 타이머가 체크 간격을 초과하면 회복 시작
                 {
                     currentST += stRecoveryAmount * Time.deltaTime; // 스테미너 회복량 계산
-                    Debug.Log(currentST + "/" + maxST);
                     if (currentST >= maxST) // 최대 스테미너를 초과하지 않도록 제한
                     {
                         currentST = maxST;
-                        Debug.Log(currentST + "/" + maxST);
                         timer = 0f; // 최대 스테미너에 도달하면 타이머 초기화
                     }
                 }

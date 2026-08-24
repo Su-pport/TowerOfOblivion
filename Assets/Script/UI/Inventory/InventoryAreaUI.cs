@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class InventoryAreaUI : MonoBehaviour
 {
     public InventoryManager inventoryManager;   // 인벤토리 매니저
+    public InventoryDescAreaUI inventoryDescAreaUI; // 인벤토리 UI내 선택한 아이템 설명패널
 
     public GameObject buttonPrefab;   // 버튼 프리팹
     public Transform contentParent;   // Content 오브젝트
@@ -74,15 +75,25 @@ public class InventoryAreaUI : MonoBehaviour
         }
     }
 
-    public void ShowInventory()
+    public void RefreshInventory()
     {
-        for(int i = 0; i<inventoryManager.currentItemCount; i++) {
-            buttons[i].transform.Find("ItemIcon").GetComponent<Image>().sprite = inventoryManager.items[i].icon;
-            if (inventoryManager.items[i].itemCode < 300)
-            {
-                buttons[i].transform.Find("ItemIcon").GetComponent<Image>().transform.localRotation = Quaternion.Euler(0, 0, -45);
-            }
+        // 아이템이 있는 공간 해당 아이콘으로 변경
+        for(int i = 0; i< inventoryManager.items.Count; i++)
+        {
+            buttons[i].GetComponent<InventorySlotUI>().SetItem(inventoryManager.items[i]);
         }
+
+        // 아이템이 없는 빈 인벤토리 알파값 0으로 변경
+        for(int i = inventoryManager.items.Count; i<maxVisibleButtons; i++)
+        {
+            buttons[i].GetComponent<InventorySlotUI>().Clear();
+        }
+
+    }
+
+    public void ClickedSlot(Item item)
+    {
+        inventoryDescAreaUI.GetSelectedItem(item);
     }
 }
     

@@ -22,7 +22,7 @@ public class InventoryManager : MonoBehaviour {
 
     private void Start()
     {
-        InitInventory();
+        // InitInventory();
         inventoryAreaUI.CreateButtons(maxInventorySize);
     }
 
@@ -35,7 +35,6 @@ public class InventoryManager : MonoBehaviour {
         {
 
             AddItem(sword1);
-            Debug.Log(sword1.name + "추가");
         }
         if (Input.GetKeyDown(KeyCode.Alpha9))
         {
@@ -47,13 +46,13 @@ public class InventoryManager : MonoBehaviour {
     // 여 기 까 지 임 시 코 드
 
 
-    private void InitInventory()
-    {
-        for ( int i = 0; i< maxInventorySize; i++)
-        {
-            items.Add(null);
-        }
-    }
+    // private void InitInventory()
+    // {
+    //     for ( int i = 0; i< maxInventorySize; i++)
+    //     {
+    //         items.Add(null);
+    //     }
+    // }
 
     public void AddMaxInventorySize(int size)
     {
@@ -64,13 +63,10 @@ public class InventoryManager : MonoBehaviour {
 
     public void AddItem(Item item) {
         if( currentItemCount < maxInventorySize) {
-            items[currentItemCount] = item;
+            items.Add(item);
             currentItemCount++;
 
-            if(item!=null)
-                Debug.Log(item.name + " has been added to the inventory.");
-
-            inventoryAreaUI.ShowInventory();
+            inventoryAreaUI.RefreshInventory();
         }
     }
 
