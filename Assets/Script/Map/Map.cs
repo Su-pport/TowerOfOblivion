@@ -477,6 +477,14 @@ Debug.Log(
             );
 
         player.transform.position = worldPosition;
+
+        Debug.Log(
+            "Map.PlacePlayerInRandomRoom: 플레이어 이동 완료. " +
+            "targetPosition=" + worldPosition +
+            ", actualPosition=" + player.transform.position +
+            ", playerObject=" + player.name,
+            this
+        );
     }
 
     /// <summary>

@@ -10,13 +10,21 @@ GameObject:
   m_Component:
   - component: {fileID: 6451208006115811707}
   - component: {fileID: 176728351468791295}
+  - component: {fileID: 1169709724258407354}
+  - component: {fileID: 5595598393330817375}
+  - component: {fileID: 2565237009910701630}
+  - component: {fileID: -8661839423084727218}
+  - component: {fileID: 2801788582955215257}
+  - component: {fileID: 2028189948410494293}
+  - component: {fileID: 6255624962088043135}
+  - component: {fileID: 928053850525561309}
   m_Layer: 0
   m_Name: StartingFloor 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6451208006115811707
 Transform:
   m_ObjectHideFlags: 0
@@ -46,4 +54,348 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerFloor
   floorNumber: 2
   spawnPoint: {fileID: 7302529185759559055, guid: bb892f45b18761e4da80b339c93d362b, type: 3}
-  map: {fileID: 4183363195017846929, guid: 5ff6dc2210536424c846d051dc30c681, type: 3}
+  map: {fileID: 928053850525561309}
+--- !u!114 &1169709724258407354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2371505887789660957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ca7d7fb06a31e47afd9b66574a78c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Map
+  backgroundTilemap: {fileID: 0}
+  floorTilemap: {fileID: 0}
+  wallRenderTilemap: {fileID: 0}
+  blackTile: {fileID: 11400000, guid: bb5e9309e2dee2a4a87351ef07688834, type: 2}
+  floorTile: {fileID: 11400000, guid: 76b4706caef736147bffd5964e3ed7fd, type: 2}
+  topWallTile: {fileID: 11400000, guid: 96a115d6a9688264ea54203fed453a1d, type: 2}
+  bottomWallTile: {fileID: 11400000, guid: 99375ff04cbd30e4d8e61836e440c075, type: 2}
+  leftWallTile: {fileID: 11400000, guid: be7d0fbca4922504da4464cd9566e519, type: 2}
+  rightWallTile: {fileID: 11400000, guid: 1d2b70225c2e474419e6fda42613324f, type: 2}
+  outerCornerTopLeftTile: {fileID: 11400000, guid: e26930539a750b04c863f09fbccb7190, type: 2}
+  outerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  outerCornerBottomLeftTile: {fileID: 11400000, guid: b5a7ecc0d3ffbc84ea454ad0f2080506, type: 2}
+  outerCornerBottomRightTile: {fileID: 11400000, guid: 290b2680d47ee7c4586265253c3d15c5, type: 2}
+  innerCornerTopLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  mapWidth: 50
+  mapHeight: 50
+  maxDepth: 4
+  minNodeSize: 14
+  minRoomSize: 6
+  roomPadding: 2
+  createNearbySharedConnections: 1
+  maximumNearbySharedConnections: 2
+  nearbyConnectionDistance: 18
+  monsterPrefab: {fileID: 7913144085954027544, guid: 3f769c66d4ce6b044b1a8b89b1e7a81e, type: 3}
+  monsterCount: 5
+  portalPrefab: {fileID: 1865075403353370815, guid: e81fffe53ec2eab4bb9a7ae53eca052a, type: 3}
+  spawnPortal: 1
+  placePlayerInRandomRoom: 1
+--- !u!114 &5595598393330817375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2371505887789660957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ca7d7fb06a31e47afd9b66574a78c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Map
+  backgroundTilemap: {fileID: 0}
+  floorTilemap: {fileID: 0}
+  wallRenderTilemap: {fileID: 0}
+  blackTile: {fileID: 11400000, guid: bb5e9309e2dee2a4a87351ef07688834, type: 2}
+  floorTile: {fileID: 11400000, guid: 76b4706caef736147bffd5964e3ed7fd, type: 2}
+  topWallTile: {fileID: 11400000, guid: 96a115d6a9688264ea54203fed453a1d, type: 2}
+  bottomWallTile: {fileID: 11400000, guid: 99375ff04cbd30e4d8e61836e440c075, type: 2}
+  leftWallTile: {fileID: 11400000, guid: be7d0fbca4922504da4464cd9566e519, type: 2}
+  rightWallTile: {fileID: 11400000, guid: 1d2b70225c2e474419e6fda42613324f, type: 2}
+  outerCornerTopLeftTile: {fileID: 11400000, guid: e26930539a750b04c863f09fbccb7190, type: 2}
+  outerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  outerCornerBottomLeftTile: {fileID: 11400000, guid: b5a7ecc0d3ffbc84ea454ad0f2080506, type: 2}
+  outerCornerBottomRightTile: {fileID: 11400000, guid: 290b2680d47ee7c4586265253c3d15c5, type: 2}
+  innerCornerTopLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  mapWidth: 50
+  mapHeight: 50
+  maxDepth: 4
+  minNodeSize: 14
+  minRoomSize: 6
+  roomPadding: 2
+  createNearbySharedConnections: 1
+  maximumNearbySharedConnections: 2
+  nearbyConnectionDistance: 18
+  monsterPrefab: {fileID: 7913144085954027544, guid: 3f769c66d4ce6b044b1a8b89b1e7a81e, type: 3}
+  monsterCount: 5
+  portalPrefab: {fileID: 1865075403353370815, guid: e81fffe53ec2eab4bb9a7ae53eca052a, type: 3}
+  spawnPortal: 1
+  placePlayerInRandomRoom: 1
+--- !u!114 &2565237009910701630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2371505887789660957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ca7d7fb06a31e47afd9b66574a78c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Map
+  backgroundTilemap: {fileID: 0}
+  floorTilemap: {fileID: 0}
+  wallRenderTilemap: {fileID: 0}
+  blackTile: {fileID: 11400000, guid: bb5e9309e2dee2a4a87351ef07688834, type: 2}
+  floorTile: {fileID: 11400000, guid: 76b4706caef736147bffd5964e3ed7fd, type: 2}
+  topWallTile: {fileID: 11400000, guid: 96a115d6a9688264ea54203fed453a1d, type: 2}
+  bottomWallTile: {fileID: 11400000, guid: 99375ff04cbd30e4d8e61836e440c075, type: 2}
+  leftWallTile: {fileID: 11400000, guid: be7d0fbca4922504da4464cd9566e519, type: 2}
+  rightWallTile: {fileID: 11400000, guid: 1d2b70225c2e474419e6fda42613324f, type: 2}
+  outerCornerTopLeftTile: {fileID: 11400000, guid: e26930539a750b04c863f09fbccb7190, type: 2}
+  outerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  outerCornerBottomLeftTile: {fileID: 11400000, guid: b5a7ecc0d3ffbc84ea454ad0f2080506, type: 2}
+  outerCornerBottomRightTile: {fileID: 11400000, guid: 290b2680d47ee7c4586265253c3d15c5, type: 2}
+  innerCornerTopLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  mapWidth: 50
+  mapHeight: 50
+  maxDepth: 4
+  minNodeSize: 14
+  minRoomSize: 6
+  roomPadding: 2
+  createNearbySharedConnections: 1
+  maximumNearbySharedConnections: 2
+  nearbyConnectionDistance: 18
+  monsterPrefab: {fileID: 7913144085954027544, guid: 3f769c66d4ce6b044b1a8b89b1e7a81e, type: 3}
+  monsterCount: 5
+  portalPrefab: {fileID: 1865075403353370815, guid: e81fffe53ec2eab4bb9a7ae53eca052a, type: 3}
+  spawnPortal: 1
+  placePlayerInRandomRoom: 1
+--- !u!114 &-8661839423084727218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2371505887789660957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ca7d7fb06a31e47afd9b66574a78c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Map
+  backgroundTilemap: {fileID: 0}
+  floorTilemap: {fileID: 0}
+  wallRenderTilemap: {fileID: 0}
+  blackTile: {fileID: 11400000, guid: bb5e9309e2dee2a4a87351ef07688834, type: 2}
+  floorTile: {fileID: 11400000, guid: 76b4706caef736147bffd5964e3ed7fd, type: 2}
+  topWallTile: {fileID: 11400000, guid: 96a115d6a9688264ea54203fed453a1d, type: 2}
+  bottomWallTile: {fileID: 11400000, guid: 99375ff04cbd30e4d8e61836e440c075, type: 2}
+  leftWallTile: {fileID: 11400000, guid: be7d0fbca4922504da4464cd9566e519, type: 2}
+  rightWallTile: {fileID: 11400000, guid: 1d2b70225c2e474419e6fda42613324f, type: 2}
+  outerCornerTopLeftTile: {fileID: 11400000, guid: e26930539a750b04c863f09fbccb7190, type: 2}
+  outerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  outerCornerBottomLeftTile: {fileID: 11400000, guid: b5a7ecc0d3ffbc84ea454ad0f2080506, type: 2}
+  outerCornerBottomRightTile: {fileID: 11400000, guid: 290b2680d47ee7c4586265253c3d15c5, type: 2}
+  innerCornerTopLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  mapWidth: 50
+  mapHeight: 50
+  maxDepth: 4
+  minNodeSize: 14
+  minRoomSize: 6
+  roomPadding: 2
+  createNearbySharedConnections: 1
+  maximumNearbySharedConnections: 2
+  nearbyConnectionDistance: 18
+  monsterPrefab: {fileID: 7913144085954027544, guid: 3f769c66d4ce6b044b1a8b89b1e7a81e, type: 3}
+  monsterCount: 5
+  portalPrefab: {fileID: 1865075403353370815, guid: e81fffe53ec2eab4bb9a7ae53eca052a, type: 3}
+  spawnPortal: 1
+  placePlayerInRandomRoom: 1
+--- !u!114 &2801788582955215257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2371505887789660957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ca7d7fb06a31e47afd9b66574a78c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Map
+  backgroundTilemap: {fileID: 0}
+  floorTilemap: {fileID: 0}
+  wallRenderTilemap: {fileID: 0}
+  blackTile: {fileID: 11400000, guid: bb5e9309e2dee2a4a87351ef07688834, type: 2}
+  floorTile: {fileID: 11400000, guid: 76b4706caef736147bffd5964e3ed7fd, type: 2}
+  topWallTile: {fileID: 11400000, guid: 96a115d6a9688264ea54203fed453a1d, type: 2}
+  bottomWallTile: {fileID: 11400000, guid: 99375ff04cbd30e4d8e61836e440c075, type: 2}
+  leftWallTile: {fileID: 11400000, guid: be7d0fbca4922504da4464cd9566e519, type: 2}
+  rightWallTile: {fileID: 11400000, guid: 1d2b70225c2e474419e6fda42613324f, type: 2}
+  outerCornerTopLeftTile: {fileID: 11400000, guid: e26930539a750b04c863f09fbccb7190, type: 2}
+  outerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  outerCornerBottomLeftTile: {fileID: 11400000, guid: b5a7ecc0d3ffbc84ea454ad0f2080506, type: 2}
+  outerCornerBottomRightTile: {fileID: 11400000, guid: 290b2680d47ee7c4586265253c3d15c5, type: 2}
+  innerCornerTopLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  mapWidth: 50
+  mapHeight: 50
+  maxDepth: 4
+  minNodeSize: 14
+  minRoomSize: 6
+  roomPadding: 2
+  createNearbySharedConnections: 1
+  maximumNearbySharedConnections: 2
+  nearbyConnectionDistance: 18
+  monsterPrefab: {fileID: 7913144085954027544, guid: 3f769c66d4ce6b044b1a8b89b1e7a81e, type: 3}
+  monsterCount: 5
+  portalPrefab: {fileID: 1865075403353370815, guid: e81fffe53ec2eab4bb9a7ae53eca052a, type: 3}
+  spawnPortal: 1
+  placePlayerInRandomRoom: 1
+--- !u!114 &2028189948410494293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2371505887789660957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ca7d7fb06a31e47afd9b66574a78c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Map
+  backgroundTilemap: {fileID: 0}
+  floorTilemap: {fileID: 0}
+  wallRenderTilemap: {fileID: 0}
+  blackTile: {fileID: 11400000, guid: bb5e9309e2dee2a4a87351ef07688834, type: 2}
+  floorTile: {fileID: 11400000, guid: 76b4706caef736147bffd5964e3ed7fd, type: 2}
+  topWallTile: {fileID: 11400000, guid: 96a115d6a9688264ea54203fed453a1d, type: 2}
+  bottomWallTile: {fileID: 11400000, guid: 99375ff04cbd30e4d8e61836e440c075, type: 2}
+  leftWallTile: {fileID: 11400000, guid: be7d0fbca4922504da4464cd9566e519, type: 2}
+  rightWallTile: {fileID: 11400000, guid: 1d2b70225c2e474419e6fda42613324f, type: 2}
+  outerCornerTopLeftTile: {fileID: 11400000, guid: e26930539a750b04c863f09fbccb7190, type: 2}
+  outerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  outerCornerBottomLeftTile: {fileID: 11400000, guid: b5a7ecc0d3ffbc84ea454ad0f2080506, type: 2}
+  outerCornerBottomRightTile: {fileID: 11400000, guid: 290b2680d47ee7c4586265253c3d15c5, type: 2}
+  innerCornerTopLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  mapWidth: 50
+  mapHeight: 50
+  maxDepth: 4
+  minNodeSize: 14
+  minRoomSize: 6
+  roomPadding: 2
+  createNearbySharedConnections: 1
+  maximumNearbySharedConnections: 2
+  nearbyConnectionDistance: 18
+  monsterPrefab: {fileID: 7913144085954027544, guid: 3f769c66d4ce6b044b1a8b89b1e7a81e, type: 3}
+  monsterCount: 5
+  portalPrefab: {fileID: 1865075403353370815, guid: e81fffe53ec2eab4bb9a7ae53eca052a, type: 3}
+  spawnPortal: 1
+  placePlayerInRandomRoom: 1
+--- !u!114 &6255624962088043135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2371505887789660957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ca7d7fb06a31e47afd9b66574a78c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Map
+  backgroundTilemap: {fileID: 0}
+  floorTilemap: {fileID: 0}
+  wallRenderTilemap: {fileID: 0}
+  blackTile: {fileID: 11400000, guid: bb5e9309e2dee2a4a87351ef07688834, type: 2}
+  floorTile: {fileID: 11400000, guid: 76b4706caef736147bffd5964e3ed7fd, type: 2}
+  topWallTile: {fileID: 11400000, guid: 96a115d6a9688264ea54203fed453a1d, type: 2}
+  bottomWallTile: {fileID: 11400000, guid: 99375ff04cbd30e4d8e61836e440c075, type: 2}
+  leftWallTile: {fileID: 11400000, guid: be7d0fbca4922504da4464cd9566e519, type: 2}
+  rightWallTile: {fileID: 11400000, guid: 1d2b70225c2e474419e6fda42613324f, type: 2}
+  outerCornerTopLeftTile: {fileID: 11400000, guid: e26930539a750b04c863f09fbccb7190, type: 2}
+  outerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  outerCornerBottomLeftTile: {fileID: 11400000, guid: b5a7ecc0d3ffbc84ea454ad0f2080506, type: 2}
+  outerCornerBottomRightTile: {fileID: 11400000, guid: 290b2680d47ee7c4586265253c3d15c5, type: 2}
+  innerCornerTopLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  mapWidth: 50
+  mapHeight: 50
+  maxDepth: 4
+  minNodeSize: 14
+  minRoomSize: 6
+  roomPadding: 2
+  createNearbySharedConnections: 1
+  maximumNearbySharedConnections: 2
+  nearbyConnectionDistance: 18
+  monsterPrefab: {fileID: 7913144085954027544, guid: 3f769c66d4ce6b044b1a8b89b1e7a81e, type: 3}
+  monsterCount: 5
+  portalPrefab: {fileID: 1865075403353370815, guid: e81fffe53ec2eab4bb9a7ae53eca052a, type: 3}
+  spawnPortal: 1
+  placePlayerInRandomRoom: 1
+--- !u!114 &928053850525561309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2371505887789660957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ca7d7fb06a31e47afd9b66574a78c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Map
+  backgroundTilemap: {fileID: 0}
+  floorTilemap: {fileID: 0}
+  wallRenderTilemap: {fileID: 0}
+  blackTile: {fileID: 11400000, guid: bb5e9309e2dee2a4a87351ef07688834, type: 2}
+  floorTile: {fileID: 11400000, guid: 76b4706caef736147bffd5964e3ed7fd, type: 2}
+  topWallTile: {fileID: 11400000, guid: 96a115d6a9688264ea54203fed453a1d, type: 2}
+  bottomWallTile: {fileID: 11400000, guid: 99375ff04cbd30e4d8e61836e440c075, type: 2}
+  leftWallTile: {fileID: 11400000, guid: be7d0fbca4922504da4464cd9566e519, type: 2}
+  rightWallTile: {fileID: 11400000, guid: 1d2b70225c2e474419e6fda42613324f, type: 2}
+  outerCornerTopLeftTile: {fileID: 11400000, guid: e26930539a750b04c863f09fbccb7190, type: 2}
+  outerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  outerCornerBottomLeftTile: {fileID: 11400000, guid: b5a7ecc0d3ffbc84ea454ad0f2080506, type: 2}
+  outerCornerBottomRightTile: {fileID: 11400000, guid: 290b2680d47ee7c4586265253c3d15c5, type: 2}
+  innerCornerTopLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerTopRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomLeftTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  innerCornerBottomRightTile: {fileID: 11400000, guid: bd6f3ac436c9eac4eae0d7d13b70a08c, type: 2}
+  mapWidth: 50
+  mapHeight: 50
+  maxDepth: 4
+  minNodeSize: 14
+  minRoomSize: 6
+  roomPadding: 2
+  createNearbySharedConnections: 1
+  maximumNearbySharedConnections: 2
+  nearbyConnectionDistance: 18
+  monsterPrefab: {fileID: 7913144085954027544, guid: 3f769c66d4ce6b044b1a8b89b1e7a81e, type: 3}
+  monsterCount: 5
+  portalPrefab: {fileID: 1865075403353370815, guid: e81fffe53ec2eab4bb9a7ae53eca052a, type: 3}
+  spawnPortal: 1
+  placePlayerInRandomRoom: 1

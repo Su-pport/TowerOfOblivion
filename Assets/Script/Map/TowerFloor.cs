@@ -20,31 +20,31 @@ public class TowerFloor : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log(
-            "TowerFloor Awake: " +
-            "name=" + gameObject.name +
-            ", floorNumber=" + floorNumber +
-            ", activeSelf=" + gameObject.activeSelf +
-            ", activeInHierarchy=" + gameObject.activeInHierarchy +
-            ", sceneValid=" + gameObject.scene.IsValid() +
-            ", spawnPoint=" + (spawnPoint != null ? spawnPoint.name : "NULL") +
-            ", map=" + (map != null ? map.name : "NULL"),
-            this
-        );
+        // Debug.Log(
+        //     "TowerFloor Awake: " +
+        //     "name=" + gameObject.name +
+        //     ", floorNumber=" + floorNumber +
+        //     ", activeSelf=" + gameObject.activeSelf +
+        //     ", activeInHierarchy=" + gameObject.activeInHierarchy +
+        //     ", sceneValid=" + gameObject.scene.IsValid() +
+        //     ", spawnPoint=" + (spawnPoint != null ? spawnPoint.name : "NULL") +
+        //     ", map=" + (map != null ? map.name : "NULL"),
+        //     this
+        // );
     }
 
     private void OnEnable()
     {
-        Debug.Log(
-            "TowerFloor OnEnable: " +
-            "name=" + gameObject.name +
-            ", floorNumber=" + floorNumber +
-            ", activeSelf=" + gameObject.activeSelf +
-            ", activeInHierarchy=" + gameObject.activeInHierarchy +
-            ", spawnPoint=" + (spawnPoint != null ? spawnPoint.name : "NULL") +
-            ", map=" + (map != null ? map.name : "NULL"),
-            this
-        );
+        // Debug.Log(
+        //     "TowerFloor OnEnable: " +
+        //     "name=" + gameObject.name +
+        //     ", floorNumber=" + floorNumber +
+        //     ", activeSelf=" + gameObject.activeSelf +
+        //     ", activeInHierarchy=" + gameObject.activeInHierarchy +
+        //     ", spawnPoint=" + (spawnPoint != null ? spawnPoint.name : "NULL") +
+        //     ", map=" + (map != null ? map.name : "NULL"),
+        //     this
+        // );
     }
 
     private void OnDisable()
@@ -71,40 +71,40 @@ public class TowerFloor : MonoBehaviour
     /// </summary>
     public void EnsureMapReference()
     {
-        Debug.Log(
-            "TowerFloor.EnsureMapReference START: " +
-            "floor=" + floorNumber +
-            ", name=" + gameObject.name +
-            ", currentMap=" + (map != null ? map.name : "NULL") +
-            ", active=" + gameObject.activeInHierarchy +
-            ", sceneValid=" + gameObject.scene.IsValid(),
-            this
-        );
+        // Debug.Log(
+        //     "TowerFloor.EnsureMapReference START: " +
+        //     "floor=" + floorNumber +
+        //     ", name=" + gameObject.name +
+        //     ", currentMap=" + (map != null ? map.name : "NULL") +
+        //     ", active=" + gameObject.activeInHierarchy +
+        //     ", sceneValid=" + gameObject.scene.IsValid(),
+        //     this
+        // );
 
         // 이미 Map이 연결되어 있는 경우
         if (map != null)
         {
-            Debug.Log(
-                "TowerFloor.EnsureMapReference: " +
-                "Map reference already exists. " +
-                "floor=" + floorNumber +
-                ", map=" + map.name +
-                ", mapObject=" + map.gameObject.name +
-                ", mapActive=" + map.gameObject.activeInHierarchy +
-                ", mapEnabled=" + map.enabled,
-                this
-            );
+            // Debug.Log(
+            //     "TowerFloor.EnsureMapReference: " +
+            //     "Map reference already exists. " +
+            //     "floor=" + floorNumber +
+            //     ", map=" + map.name +
+            //     ", mapObject=" + map.gameObject.name +
+            //     ", mapActive=" + map.gameObject.activeInHierarchy +
+            //     ", mapEnabled=" + map.enabled,
+            //     this
+            // );
 
             return;
         }
 
-        Debug.Log(
-            "TowerFloor.EnsureMapReference: " +
-            "Map reference is NULL. Searching child objects... " +
-            "floor=" + floorNumber +
-            ", name=" + gameObject.name,
-            this
-        );
+        // Debug.Log(
+        //     "TowerFloor.EnsureMapReference: " +
+        //     "Map reference is NULL. Searching child objects... " +
+        //     "floor=" + floorNumber +
+        //     ", name=" + gameObject.name,
+        //     this
+        // );
 
         // 자식에서 Map 검색
         map = GetComponentInChildren<Map>(true);
@@ -200,24 +200,24 @@ public class TowerFloor : MonoBehaviour
     /// </summary>
         public void AssignMap(Map m)
     {
-        Debug.Log(
-            "TowerFloor.AssignMap: " +
-            "floor=" + floorNumber +
-            ", object=" + gameObject.name +
-            ", oldMap=" + (map != null ? map.name : "NULL") +
-            ", newMap=" + (m != null ? m.name : "NULL"),
-            this
-        );
+        // Debug.Log(
+        //     "TowerFloor.AssignMap: " +
+        //     "floor=" + floorNumber +
+        //     ", object=" + gameObject.name +
+        //     ", oldMap=" + (map != null ? map.name : "NULL") +
+        //     ", newMap=" + (m != null ? m.name : "NULL"),
+        //     this
+        // );
 
         map = m;
 
-        Debug.Log(
-            "TowerFloor.AssignMap COMPLETE: " +
-            "floor=" + floorNumber +
-            ", finalMap=" + (map != null ? map.name : "NULL") +
-            ", mapObject=" + (map != null ? map.gameObject.name : "NULL"),
-            this
-        );
+        // Debug.Log(
+        //     "TowerFloor.AssignMap COMPLETE: " +
+        //     "floor=" + floorNumber +
+        //     ", finalMap=" + (map != null ? map.name : "NULL") +
+        //     ", mapObject=" + (map != null ? map.gameObject.name : "NULL"),
+        //     this
+        // );
     }
 
     // ============================================================
@@ -232,13 +232,13 @@ public class TowerFloor : MonoBehaviour
     {
         if (map != null && !map.gameObject.scene.IsValid())
         {
-            Debug.Log(
-                "TowerFloor.EnsureRuntimeMap: " +
-                "Map is a prefab asset reference. Creating runtime instance. " +
-                "floor=" + floorNumber +
-                ", prefabMap=" + map.name,
-                this
-            );
+            // Debug.Log(
+            //     "TowerFloor.EnsureRuntimeMap: " +
+            //     "Map is a prefab asset reference. Creating runtime instance. " +
+            //     "floor=" + floorNumber +
+            //     ", prefabMap=" + map.name,
+            //     this
+            // );
 
             Map prefabMap = map;
             Map newMap = gameObject.AddComponent<Map>();
@@ -266,14 +266,14 @@ public class TowerFloor : MonoBehaviour
                 GetComponentInChildren<Map>(true);
         }
 
-        Debug.Log(
-            "TowerFloor OnValidate: " +
-            "name=" + gameObject.name +
-            ", floorNumber=" + floorNumber +
-            ", spawnPoint=" + (spawnPoint != null ? spawnPoint.name : "NULL") +
-            ", map=" + (map != null ? map.name : "NULL"),
-            this
-        );
+        // Debug.Log(
+        //     "TowerFloor OnValidate: " +
+        //     "name=" + gameObject.name +
+        //     ", floorNumber=" + floorNumber +
+        //     ", spawnPoint=" + (spawnPoint != null ? spawnPoint.name : "NULL") +
+        //     ", map=" + (map != null ? map.name : "NULL"),
+        //     this
+        // );
     }
 
 #endif

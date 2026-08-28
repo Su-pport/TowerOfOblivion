@@ -284,13 +284,13 @@ public class TowerManager : MonoBehaviour
 
                 playerInRoom = true;
 
-                Debug.Log(
-                    $"TowerManager: player verified in room. " +
-                    $"Position: {player.transform.position}, " +
-                    $"Cell: {playerCell}, " +
-                    $"Room: {room.Bounds}",
-                    this
-                );
+                // Debug.Log(
+                //     $"TowerManager: player verified in room. " +
+                //     $"Position: {player.transform.position}, " +
+                //     $"Cell: {playerCell}, " +
+                //     $"Room: {room.Bounds}",
+                //     this
+                // );
 
                 break;
             }
